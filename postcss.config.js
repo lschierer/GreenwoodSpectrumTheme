@@ -1,5 +1,4 @@
 import path from "path";
-import process from "node:process";
 
 const plugins = {
   "postcss-import": {

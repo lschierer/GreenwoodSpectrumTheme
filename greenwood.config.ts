@@ -2,6 +2,8 @@ import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
 
 import type { Config } from "@greenwood/cli";
 
+import { FooterCopyrightSection } from "./src/plugins/FooterSectionPlugin.ts";
+
 export default {
   useTsc: true,
   activeContent: true,
@@ -21,6 +23,12 @@ export default {
     },
   },
   plugins: [
+    //FooterCopyrightSectionPlugin(),
+    {
+      type: "resource",
+      name: "footer-copyright-section",
+      provider: (compilation) => new FooterCopyrightSection(compilation, {}),
+    },
     greenwoodPluginPostCss({
       extendConfig: true,
     }),

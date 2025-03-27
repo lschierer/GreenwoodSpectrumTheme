@@ -1,0 +1,113 @@
+@import "@spectrum-css/tokens";
+@import "@spectrum-css/typography";
+@import "@spectrum-css/icon";
+@import "@spectrum-css/page";
+@import "@spectrum-css/link";
+@import "@spectrum-css/actionbutton";
+@import "@spectrum-css/button";
+@import "@spectrum-css/picker";
+@import "@spectrum-css/menu";
+@import "remark-alerts/styles/github-base.css";
+@import "remark-alerts/styles/github-colors-light.css";
+@import "remark-alerts/styles/github-colors-dark-class.css";
+
+/* Default Colors */
+:root,
+::backdrop {
+  --spectrum-background-base-color: var(--spectrum-gray-200);
+  --sl-color-accent-high: var(--spectrum-cyan-1000);
+  --sl-color-accent: var(--spectrum-cyan-700);
+  --sl-color-accent-low: var(--spectrum-cyan-400);
+  --sl-color-bg: var(--spectrum-background-base-color);
+
+  --sl-color-white: var(--spectrum-gray-50);
+  --sl-color-gray-1: var(--spectrum-gray-200);
+  --sl-color-gray-2: var(--spectrum-gray-300);
+  --sl-color-gray-3: var(--spectrum-gray-400);
+  --sl-color-gray-4: var(--spectrum-gray-500);
+  --sl-color-gray-5: var(--spectrum-gray-600);
+  --sl-color-gray-6: var(--spectrum-gray-700);
+  --sl-color-gray-7: var(--spectrum-gray-800);
+  --sl-color-black: var(--spectrum-gray-900);
+}
+
+/* I find I prefer less color range between high and low in dark mode */
+
+/* Light mode colors. */
+:root[data-theme="light"],
+[data-theme="light"] ::backdrop {
+  --sl-color-accent-high: var(--spectrum-cyan-1000);
+  --sl-color-accent-low: var(--spectrum-cyan-400);
+}
+/* Dark mode colors. */
+:root[data-theme="dark"],
+[data-theme="dark"] ::backdrop {
+  --sl-color-accent-high: var(--spectrum-cyan-900);
+  --sl-color-accent-low: var(--spectrum-cyan-500);
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  color: var(--sl-color-black);
+  background-color: var(--spectrum-background-base-color);
+  display: flex;
+  flex-direction: column;
+
+  --mod-body-font-color: var(--sl-color-black);
+  --mod-heading-font-color: var(--sl-color-accent);
+  --mod-heading-serif-font-family: "Inconsolata", monospace;
+  --mod-body-serif-font-family: "Inconsolata", monospace;
+}
+
+sp-theme {
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  flex: 1;
+}
+
+header h1.spectrum-Heading {
+  text-align: center;
+  color: var(--sl-color-accent);
+}
+
+main {
+  z-index: 1;
+  margin-left: 8px;
+  margin-right: 8px;
+  flex: 1 0 auto; /* This allows the main content to grow and push the footer down */
+}
+
+page-outlet {
+  display: block;
+  flex: 1 0 auto; /* This allows the page-outlet to grow and push the footer down */
+}
+
+body div.main {
+  display: flex;
+  flex-direction: row;
+}
+
+footer {
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  width: 100%;
+  margin-top: auto; /* Push footer to bottom when content is short */
+}
+
+div.content {
+  width: 100%;
+  margin-left: 1rem;
+}

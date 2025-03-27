@@ -1,0 +1,17 @@
+@import "@spectrum-css/tokens";
+@import "@spectrum-css/typography";
+@import "@spectrum-css/sidenav";
+@import "@spectrum-web-components/styles/scale-medium.css";
+@import "@spectrum-web-components/styles/typography.css";
+
+* {
+  --highcontrast-sidenav-top-level-font-color: var(--sl-color-accent);
+  --mod-sidenav-content-color-default-selected: var(--sl-color-accent-high);
+  --mod-sidenav-background-default: var(--sl-color-gray-2);
+  --mod-sidenav-item-background-default-selected: var(--sl-color-gray-3);
+}
+
+nav {
+  max-width: 20vw;
+  padding-left: 0.3rem;
+}

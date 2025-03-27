@@ -4,12 +4,7 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: [
-      "packages/starlight/.astro/**",
-      "packages/starlight/dist/**",
-      "packages/greenwood/.greenwood/**",
-      "packages/greenwood/public/**",
-    ],
+    ignores: [".greenwood/**", "./public/**", "./dist/**"],
   },
   {
     extends: [
@@ -40,7 +35,9 @@ export default tseslint.config(
         ...globals.browser,
       },
       parserOptions: {
-        projectService: true,
+        projectService: {
+          allowDefaultProject: ["postcss.config.js"],
+        },
         tsconfigRootDir: import.meta.dirname,
         projectFolderIgnoreList: ["**/node_modules/**"],
       },
@@ -48,17 +45,7 @@ export default tseslint.config(
   },
   {
     files: ["**/*/*.js", "**/*/*.mjs"],
-    ignores: ["packages/greenwood/public/**"],
+    ignores: ["public/**"],
     extends: [eslint.configs.recommended, tseslint.configs.disableTypeChecked],
   },
-  {
-    files: [
-      "packages/greenwood/src/schemas/*.ts",
-      "packages/greenwood/src/schemas/*.mts",
-      "packages/starlight/src/schemas/*.ts",
-    ],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-    },
-  }
 );
