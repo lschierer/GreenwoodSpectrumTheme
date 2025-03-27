@@ -129,3 +129,12 @@ export class FooterCopyrightSection implements Resource {
     });
   }
 }
+
+export const FooterCopyrightSectionPlugin = (options = {}) => {
+  return {
+    type: "resource",
+    name: "footer-copyright-section",
+    provider: (compilation: Compilation) =>
+      new FooterCopyrightSection(compilation, options),
+  };
+};
