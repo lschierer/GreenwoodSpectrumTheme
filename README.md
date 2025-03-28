@@ -1,5 +1,5 @@
 # GreenwoodSpectrumTheme
-A theme pack for Greenwood using [Adobe Spectrum] CSS and Web Components.
+A theme pack for Greenwood using [Adobe Spectrum] CSS and Web Components. I found myself repeating my own work several times over, so I am centralizing the reused components in one place.
 
 Some notes on running this:
 * [mise], if installed will attempt to set up your environment for you to the extent it can.

@@ -2,7 +2,8 @@ import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
 
 import type { Config } from "@greenwood/cli";
 
-import { FooterCopyrightSection } from "./src/plugins/FooterSectionPlugin.ts";
+//import { FooterCopyrightSection } from "./src/plugins/FooterSectionPlugin.ts";
+import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
 
 export default {
   useTsc: true,
@@ -24,11 +25,12 @@ export default {
   },
   plugins: [
     //FooterCopyrightSectionPlugin(),
-    {
+    DirectoryIndexSourcePlugin(),
+    /*{
       type: "resource",
       name: "footer-copyright-section",
       provider: (compilation) => new FooterCopyrightSection(compilation, {}),
-    },
+    },*/
     greenwoodPluginPostCss({
       extendConfig: true,
     }),
