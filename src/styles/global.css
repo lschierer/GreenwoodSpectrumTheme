@@ -13,8 +13,10 @@
 
 /* Default Colors */
 :root,
-::backdrop {
-  --spectrum-background-base-color: var(--spectrum-gray-200);
+::backdrop,
+sp-theme {
+  --spectrum-background-base-color: var(--spectrum-gray-100);
+  --mod-splitview-background-color: var(--spectrum-background-base-color);
   --sl-color-accent-high: var(--spectrum-cyan-1000);
   --sl-color-accent: var(--spectrum-cyan-700);
   --sl-color-accent-low: var(--spectrum-cyan-400);
@@ -70,6 +72,10 @@ body {
   --mod-body-serif-font-family: "Inconsolata", monospace;
 }
 
+sp-split-view {
+  height: 100%;
+}
+
 sp-theme {
   z-index: 0;
   display: flex;
@@ -77,6 +83,7 @@ sp-theme {
   min-height: 100vh;
   width: 100%;
   flex: 1;
+  background-color: var(--spectrum-background-base-color);
 }
 
 header h1.spectrum-Heading {
@@ -101,13 +108,30 @@ body div.main {
   flex-direction: row;
 }
 
+div.content {
+  width: 100%;
+  margin-left: 1rem;
+}
+
 footer {
   flex-shrink: 0; /* Prevent footer from shrinking */
   width: 100%;
   margin-top: auto; /* Push footer to bottom when content is short */
+
+  background-color: var(--sl-color-accent-high);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  --spectrum-detail-color: var(--sl-color-accent-low);
+  --spectrum-accent-content-color-default: var(--sl-color-accent-low);
 }
 
-div.content {
-  width: 100%;
-  margin-left: 1rem;
+span.privacy {
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+span.copyright {
+  margin-right: 5rem;
 }

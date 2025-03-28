@@ -20,7 +20,7 @@ export default class DirectoryIndex extends HTMLElement {
   private _entries = new Array<Page>();
   private _recurse = false;
 
-  async connectedCallback() {
+  protected getAttributes = () => {
     if (DEBUG) {
       console.log(`I have attributes ${JSON.stringify(this.attributes)}`);
     }
@@ -42,6 +42,10 @@ export default class DirectoryIndex extends HTMLElement {
       const stack = this._directory.split("/");
       this._directory = stack.map((s) => encodeURIComponent(s)).join("/");
     }
+  };
+
+  async connectedCallback() {
+    this.getAttributes();
     await this.getEntries();
     this.renderEntries();
   }
@@ -127,13 +131,6 @@ export default class DirectoryIndex extends HTMLElement {
     });
   };
 
-  constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-
-    this.renderEntries();
-  }
-
   renderEntries() {
     if (this._entries.length > 0) {
       if (DEBUG) {
@@ -141,86 +138,71 @@ export default class DirectoryIndex extends HTMLElement {
           `DirectoryIndex connectedCallback sees ${this._entries.length} entries after getEntries() call`,
         );
       }
+      document.adoptedStyleSheets.push(SpectrumCSScard);
+      document.adoptedStyleSheets.push(SpectrumCSSlink);
+      document.adoptedStyleSheets.push(DirectoryIndexCSS);
+      this.innerHTML = `
+        <div class="cardBox directoryIndex">
+            <div class="offsetter">${DEBUG ? this._entries.length : ""}</div>
 
-      if (this.shadowRoot) {
-        this.shadowRoot.adoptedStyleSheets.push(SpectrumCSScard);
-        this.shadowRoot.adoptedStyleSheets.push(SpectrumCSSlink);
-        this.shadowRoot.adoptedStyleSheets.push(DirectoryIndexCSS);
-
-        this.shadowRoot.innerHTML = `
-          <div class="cardBox directoryIndex">
-              <div class="offsetter">${DEBUG ? this._entries.length : ""}</div>
-
-              ${this._entries
-                .map((entry, index) => {
-                  const imgTemplate = `
-                    <iconify-icon
-                      icon="lucide:book-up"
-                      slot="preview"
-                      width="3rem"
-                      >
-                    </iconify-icon>
-                  `;
-                  const descriptionTemplate = `
-                    <div slot="description"> ${
+            ${this._entries
+              .map((entry, index) => {
+                const imgTemplate = `
+                  <iconify-icon
+                    icon="lucide:book-up"
+                    slot="preview"
+                    width="3rem"
+                    >
+                  </iconify-icon>
+                `;
+                const descriptionTemplate = `
+                  <div slot="description"> ${
+                    entry.data
+                      ? Object.keys(entry.data).includes("description")
+                        ? entry.data["description" as keyof typeof entry.data]
+                        : ""
+                      : ""
+                  }
+                  </div>
+                `;
+                return `
+                <div class="cardItem">
+                  <sp-card
+                    horizontal
+                    variant="quiet"
+                    heading="${entry.title ? entry.title : entry.label}"
+                    subheading=""
+                    href="${entry.route}"
+                    value="card-${index}"
+                  >
+                    ${imgTemplate}
+                    ${
                       entry.data
                         ? Object.keys(entry.data).includes("description")
-                          ? entry.data["description" as keyof typeof entry.data]
+                          ? descriptionTemplate
                           : ""
                         : ""
                     }
-                    </div>
-                  `;
-                  return `
-                  <div class="cardItem">
-                    <sp-card
-                      horizontal
-                      variant="quiet"
-                      heading="${entry.title ? entry.title : entry.label}"
-                      subheading=""
-                      href="${entry.route}"
-                      value="card-${index}"
-                    >
-                      ${imgTemplate}
-                      ${
-                        entry.data
-                          ? Object.keys(entry.data).includes("description")
-                            ? descriptionTemplate
-                            : ""
-                          : ""
-                      }
 
-                    </sp-card>
-                  </div>
-                `;
-                })
-                .join("")}
-            </ul>
-          </div>
-        `;
-      } else {
-        if (DEBUG) {
-          console.log(`shadow root is not accessible`);
-        }
-      }
+                  </sp-card>
+                </div>
+              `;
+              })
+              .join("")}
+          </ul>
+        </div>
+      `;
     } else {
       if (DEBUG) {
         const template = `
           <span>No entries found for '${this._directory}'</span>
         `;
-        if (this.shadowRoot) {
-          this.shadowRoot.innerHTML = template;
-        }
         this.innerHTML = template;
       } else {
         const template = `
           <!-- No Entries found for ${this._directory} -->
         `;
-        if (this.shadowRoot) {
-          this.shadowRoot.innerHTML = template;
-        } else {
-          this.innerHTML = template;
-        }
+        this.innerHTML = template;
       }
     }
   }

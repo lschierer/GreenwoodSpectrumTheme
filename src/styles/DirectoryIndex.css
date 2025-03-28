@@ -16,6 +16,7 @@ div.offsetter {
 }
 
 sp-card {
+  padding: 0 1rem;
   width: fit-content;
   height: 50%;
 }

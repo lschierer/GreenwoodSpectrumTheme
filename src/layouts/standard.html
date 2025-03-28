@@ -1,0 +1,21 @@
+<head>
+  <script type="module">
+    import "@spectrum-web-components/split-view/sp-split-view.js";
+  </script>
+</head>
+<body>
+  <div class="title section">
+    <h1 class="spectrum-Heading spectrum-Heading--sizeXXL">
+      ${globalThis.page.title}
+    </h1>
+  </div>
+
+  <sp-split-view resizable primary-size="20%">
+    <div class="nav"></div>
+    <div>
+      <main>
+        <content-outlet></content-outlet>
+      </main>
+    </div>
+  </sp-split-view>
+</body>

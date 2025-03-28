@@ -5,13 +5,45 @@
 @import "@spectrum-web-components/styles/typography.css";
 
 * {
+  /* Core Spectrum variables for sidenav */
+  --mod-sidenav-indent: 1rem; /* Controls indentation between levels */
+  --mod-sidenav-item-padding-x: 0.5rem; /* Horizontal padding for items */
+  --mod-sidenav-item-gap: 0.5rem; /* Gap between icon and text */
+
+  /* Colors */
   --highcontrast-sidenav-top-level-font-color: var(--sl-color-accent);
   --mod-sidenav-content-color-default-selected: var(--sl-color-accent-high);
   --mod-sidenav-background-default: var(--sl-color-gray-2);
   --mod-sidenav-item-background-default-selected: var(--sl-color-gray-3);
+  --mod-sidenav-item-background-default-hover: var(--sl-color-gray-3);
+
+  /* Typography */
+  --mod-sidenav-item-font-weight-selected: 700; /* Bold for selected items */
+  --mod-sidenav-item-text-decoration-selected: none; /* No underline by default */
 }
 
 nav {
   max-width: 20vw;
   padding-left: 0.3rem;
+}
+
+/* Fix indentation between tree levels */
+.spectrum-SideNav--multiLevel .spectrum-SideNav {
+  margin-left: var(--mod-sidenav-indent) !important;
+}
+
+/* First level items */
+.spectrum-SideNav > .spectrum-SideNav-item {
+  margin-left: 0;
+}
+
+/* Adjust padding for items with icons */
+.spectrum-SideNav-itemLink {
+  padding-left: var(--mod-sidenav-item-padding-x) !important;
+}
+
+/* Make the icon and text alignment consistent */
+.spectrum-SideNav-itemLink iconify-icon {
+  margin-right: var(--mod-sidenav-item-gap);
+  vertical-align: middle;
 }

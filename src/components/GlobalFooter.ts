@@ -6,30 +6,22 @@ if (DEBUG) {
   console.log("DEBUG enabled for ${new URL(import.meta.url).pathname}");
 }
 
-import styles from "../styles/GlobalFooter.css" with { type: "css" };
-
 export default class GlobalFooter extends HTMLElement {
   connectedCallback() {
-    document.adoptedStyleSheets.push(styles);
-    this.innerHTML = `
-      <div class="footer">
-      ${
-        config.privacyPolicy
-          ? `
-        <span class="privacy spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light">
-          <a href="${config.privacyPolicy}" class="spectrum-Link spectrum-Link--quiet spectrum-Link--primary">
-            Privacy Policy
-          </a>
-        </span>
-        `
-          : ""
+    const footer = document.querySelector("footer");
+    if (footer) {
+      if (config.privacyPolicy) {
+        const template = document.createElement("template");
+        template.innerHTML = `
+          <span class="privacy spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light">
+            <a href="${config.privacyPolicy}" class="spectrum-Link spectrum-Link--quiet spectrum-Link--primary">
+              Privacy Policy
+            </a>
+          </span>
+        `;
+        footer.appendChild(template.content.cloneNode(true));
       }
-
-        <span id="copyright" class="copyright spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light">
-          COPYRIGHTPLACEHOLDER
-        </span>
-      </div>
-    `;
+    }
   }
 }
 customElements.define("global-footer", GlobalFooter);

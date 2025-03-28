@@ -2,14 +2,20 @@
 let DEBUG: boolean = false;
 
 const fileDebug: Record<string, boolean> = {
-  "/components/TopHeader.ts": false,
-  "/components/GlobalFooter.ts": true,
+  "/components/DirectoryIndex.ts": false,
+  "/components/GlobalFooter.ts": false,
   "/components/SiteTitle.ts": false,
   "/components/ThemeSelector.ts": false,
-  "/components/theme.ts": false,
+  "/components/TopHeader.ts": false,
   "/components/sidebar.ts": false,
-  "/lib/debug.ts": true,
+  "/components/theme.ts": false,
+  "/greenwood-spectrum-theme.config.ts": false,
+  "/layouts/standard.ts": true,
+  "/lib/config.ts": false,
+  "/lib/debug.ts": false,
+  "/plugins/DirectoryIndexPlugin.ts": false,
   "/plugins/FooterSectionPlugin.ts": true,
+  "/plugins/SideBarPlugin.ts": false,
 };
 
 function isAbsolutePath(path: string): boolean {
