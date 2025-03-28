@@ -140,6 +140,17 @@ class FooterSectionResource implements Resource {
   };
 }
 
+/* this will infinitally hang greenwood with no console output
+const ExternalPluginFooterSection = (options = {}): ResourcePlugin => {
+  return {
+    type: "resource",
+    name: "external-plugin-footersecton",
+    provider: (compilation) => new FooterSectionResource(compilation, options),
+  };
+};
+*/
+
+//This version differs only in that it wraps the return in an array. it works fine.
 const ExternalPluginFooterSection = (options = {}): ResourcePlugin[] => {
   return [
     {
