@@ -5,9 +5,9 @@ import { JSDOM } from "jsdom";
 
 import type { Compilation, Resource, ResourcePlugin } from "@greenwood/cli";
 
-import { config } from "../lib/config.ts";
-
 import debugFunction from "../lib/debug.ts";
+import { type Config } from "../lib/config.ts";
+
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);
 if (DEBUG) {
   console.log(`DEBUG enabled for ${new URL(import.meta.url).pathname}`);
@@ -15,12 +15,12 @@ if (DEBUG) {
 
 class FooterSectionResource implements Resource {
   private compilation: Compilation;
-  private options: object;
+  private options: Config;
   private repo = process.cwd();
 
   private contentType;
 
-  constructor(compilation: Compilation, options: object = {}) {
+  constructor(compilation: Compilation, options: Config) {
     this.compilation = compilation;
     this.options = options;
 
@@ -111,8 +111,8 @@ class FooterSectionResource implements Resource {
       console.log(`start of getAuthors`);
     }
     const repoAuthors = new Set<string>();
-    if (Array.isArray(config.authors)) {
-      for (const author of config.authors) {
+    if (Array.isArray(this.options.authors)) {
+      for (const author of this.options.authors) {
         repoAuthors.add(author);
       }
     } else {
@@ -151,7 +151,7 @@ const ExternalPluginFooterSection = (options = {}): ResourcePlugin => {
 */
 
 //This version differs only in that it wraps the return in an array. it works fine.
-const ExternalPluginFooterSection = (options = {}): ResourcePlugin[] => {
+const ExternalPluginFooterSection = (options: Config): ResourcePlugin[] => {
   return [
     {
       type: "resource",

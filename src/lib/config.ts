@@ -57,6 +57,9 @@ export const Config = z.object({
 export type Config = z.infer<typeof Config>;
 
 export async function loadConfig(): Promise<Config> {
+  if (DEBUG) {
+    console.log(`loadConfig start`);
+  }
   const module = (await import(
     new URL(configPath, import.meta.url).href
   )) as object;
@@ -69,7 +72,3 @@ export async function loadConfig(): Promise<Config> {
 
   return parsed.data;
 }
-
-const result = await loadConfig();
-
-export const config = Object.freeze(result);

@@ -1,4 +1,4 @@
-import { config } from "../lib/config.ts";
+import { config } from "../lib/staticConfig.ts";
 
 import debugFunction from "../lib/debug.ts";
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);

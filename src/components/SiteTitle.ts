@@ -6,7 +6,7 @@ if (DEBUG) {
 import SiteTitleCSS from "../styles/SiteTitle.css" with { type: "css" };
 import GlobalCSS from "../styles/global.css" with { type: "css" };
 
-import { config } from "../lib/config.ts";
+import { config } from "../lib/staticConfig.ts";
 
 export default class SiteTitle extends HTMLElement {
   connectedCallback() {

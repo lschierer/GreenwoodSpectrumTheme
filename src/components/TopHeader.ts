@@ -5,7 +5,7 @@ if (DEBUG) {
 }
 import "./ThemeSelector.ts";
 
-import { config } from "../lib/config.ts";
+import { config } from "../lib/staticConfig.ts";
 
 import styles from "../styles/TopHeader.css" with { type: "css" };
 

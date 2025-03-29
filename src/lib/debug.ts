@@ -11,7 +11,7 @@ const fileDebug: Record<string, boolean> = {
   "/components/theme.ts": false,
   "/greenwood-spectrum-theme.config.ts": false,
   "/layouts/standard.ts": true,
-  "/lib/config.ts": false,
+  "/lib/config.ts": true,
   "/lib/debug.ts": false,
   "/plugins/DirectoryIndexPlugin.ts": false,
   "/plugins/FooterSectionPlugin.ts": true,

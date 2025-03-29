@@ -2,9 +2,10 @@ import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
 
 import type { Config } from "@greenwood/cli";
 
-import { ExternalPluginFooterSection } from "./src/plugins/FooterSectionPlugin.ts";
-import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
-import { ExternalPluginSideBar } from "./src/plugins/SideBarPlugin.ts";
+import { greenwoodSpectrumThemePack } from "./greenwood-spectrum-theme.ts";
+//import { loadConfig } from "./src/lib/config.ts";
+
+import { config } from "./src/lib/staticConfig.ts";
 
 export default {
   useTsc: true,
@@ -25,10 +26,7 @@ export default {
     },
   },
   plugins: [
-    ExternalPluginFooterSection(),
-    DirectoryIndexSourcePlugin(),
-
-    ExternalPluginSideBar(),
+    greenwoodSpectrumThemePack(config),
     greenwoodPluginPostCss({
       extendConfig: true,
     }),
