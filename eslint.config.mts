@@ -4,7 +4,7 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: ["**/.greenwood/**", "**/public/**", "**/dist/**"],
+    ignores: [".greenwood/**", "public/**", "dist/**"],
   },
   {
     extends: [
@@ -45,7 +45,13 @@ export default tseslint.config(
   },
   {
     files: ["**/*/*.js", "**/*/*.mjs", "postprocessing.js"],
-    ignores: ["public/**"],
+    ignores: ["public/**", "dist/**"],
     extends: [eslint.configs.recommended, tseslint.configs.disableTypeChecked],
+  },
+  {
+    files: ["src/schemas/*.ts", "src/schemas/*.mts", "src/schemas/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+    },
   },
 );

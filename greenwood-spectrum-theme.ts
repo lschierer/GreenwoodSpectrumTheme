@@ -1,4 +1,14 @@
-import type { ContextPlugin, Compilation, Plugin } from "@greenwood/cli";
+import type {
+  Compilation,
+  SourcePlugin,
+  AdapterPlugin,
+  ContextPlugin,
+  CopyPlugin,
+  RendererPlugin,
+  ResourcePlugin,
+  RollupPlugin,
+  ServerPlugin,
+} from "@greenwood/cli";
 
 import process from "node:process";
 
@@ -33,11 +43,20 @@ export const SpectrumContextPlugin = () => {
 };
 
 export const greenwoodSpectrumThemePack = (options: Config) => {
-  const pa: Plugin[] = new Array<Plugin>();
+  const pa = new Array<
+    | SourcePlugin
+    | AdapterPlugin
+    | ContextPlugin
+    | CopyPlugin
+    | RendererPlugin
+    | ResourcePlugin
+    | RollupPlugin
+    | ServerPlugin
+  >();
   pa.push(...ExternalPluginSideBar(options));
   pa.push(...ExternalPluginFooterSection(options));
-  pa.push(SpectrumContextPlugin());
   pa.push(DirectoryIndexSourcePlugin());
+  pa.push(SpectrumContextPlugin());
 
   return pa;
 };
