@@ -34,10 +34,10 @@ export const SpectrumContextPlugin = () => {
 
 export const greenwoodSpectrumThemePack = (options: Config) => {
   const pa: Plugin[] = new Array<Plugin>();
-  pa.push(SpectrumContextPlugin());
-  pa.push(DirectoryIndexSourcePlugin());
   pa.push(...ExternalPluginSideBar(options));
   pa.push(...ExternalPluginFooterSection(options));
+  pa.push(SpectrumContextPlugin());
+  pa.push(DirectoryIndexSourcePlugin());
 
   return pa;
 };
