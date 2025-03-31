@@ -71,6 +71,9 @@ importers:
       '@spectrum-web-components/theme':
         specifier: ^1.4.0
         version: 1.4.0
+      greenwoodspectrumtheme:
+        specifier: 'link:'
+        version: 'link:'
       iconify-icon:
         specifier: ^2.3.0
         version: 2.3.0

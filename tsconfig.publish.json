@@ -11,6 +11,8 @@
   },
   "include": [
     "./greenwood-spectrum-theme.ts",
+    "src/components/**/*.ts",
+    "src/layouts/**/*.ts",
     "src/plugins/**/*.ts",
     "src/lib/**/*.ts",
     "src/styles/**/*.css"
