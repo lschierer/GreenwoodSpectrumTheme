@@ -1,10 +1,10 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "dist/greenwood-spectrum-theme.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/greenwood-spectrum-theme.d.ts",
   "exports": {
     ".": {
       "import": "./dist/greenwood-spectrum-theme.js",
@@ -13,6 +13,10 @@
     "./config": {
       "import": "./dist/src/lib/config.js",
       "types": "./dist/src/lib/config.d.ts"
+    },
+    "./components/*": {
+      "import": "./dist/src/components/*.js",
+      "types": "./dist/src/components/*.d.ts"
     }
   },
   "files": [
@@ -51,7 +55,8 @@
     "remark-rehype": "^11.1.1",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0"
+    "typescript-eslint": "^8.28.0",
+    "validate-package-exports": "^0.9.0"
   },
   "license": "ISC",
   "dependencies": {
