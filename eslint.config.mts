@@ -36,7 +36,7 @@ export default tseslint.config(
       },
       parserOptions: {
         projectService: {
-          allowDefaultProject: ["fix-declarations.js", "postcss.config.js"],
+          allowDefaultProject: ["postprocessing.js", "postcss.config.js"],
         },
         tsconfigRootDir: import.meta.dirname,
         projectFolderIgnoreList: ["**/node_modules/**"],
@@ -44,7 +44,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*/*.js", "**/*/*.mjs", "fix-declarations.js"],
+    files: ["**/*/*.js", "**/*/*.mjs", "postprocessing.js"],
     ignores: ["public/**"],
     extends: [eslint.configs.recommended, tseslint.configs.disableTypeChecked],
   },

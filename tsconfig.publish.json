@@ -5,18 +5,15 @@
     "emitDeclarationOnly": false,
     "sourceMap": true,
     "noEmit": false,
-    "outDir": "./dist",
+    "outDir": "./dist/tempcan ",
     "allowImportingTsExtensions": true,
-    "rewriteRelativeImportExtensions": true
+    "rewriteRelativeImportExtensions": true,
+    "rootDir": "."
   },
   "include": [
     "./greenwood-config.ts",
     "./greenwood-spectrum-theme.ts",
-    "src/components/**/*.ts",
-    "src/layouts/**/*.ts",
-    "src/plugins/**/*.ts",
-    "src/lib/**/*.ts",
-    "src/styles/**/*.css"
+    "src/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "public"]
+  "exclude": ["node_modules", "dist", "public", "src/pages/**/*.ts"]
 }

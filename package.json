@@ -11,12 +11,12 @@
       "types": "./dist/greenwood-spectrum-theme.d.ts"
     },
     "./config": {
-      "import": "./dist/src/lib/config.js",
-      "types": "./dist/src/lib/config.d.ts"
+      "import": "./dist/lib/config.js",
+      "types": "./dist/lib/config.d.ts"
     },
     "./components/*": {
-      "import": "./dist/src/components/*.js",
-      "types": "./dist/src/components/*.d.ts"
+      "import": "./dist/components/*.js",
+      "types": "./dist/components/*.d.ts"
     }
   },
   "files": [
@@ -29,7 +29,7 @@
     "build": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood build",
     "build:debug": "NODE_OPTIONS='--trace-warnings --inspect --experimental-strip-types --import @greenwood/cli/register' greenwood build",
     "serve": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood serve",
-    "prepublish": "rm -rf dist/ && mkdir -p dist &&  tsc --project tsconfig.publish.json && node fix-declarations.js && rsync -rv --exclude 'pages/' --exclude '*.ts' src dist/"
+    "prepublish": "rm -rf dist/ && mkdir -p dist &&  tsc --project tsconfig.publish.json && node postprocessing.js && rsync -rv --exclude 'pages/' --exclude '*.ts' src/ dist/"
   },
   "devDependencies": {
     "@greenwood/cli": "0.32.0-alpha.8",
