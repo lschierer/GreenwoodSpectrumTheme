@@ -2,13 +2,18 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "sourceMap": true,
     "noEmit": false,
     "outDir": "./dist",
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/greenwood-spectrum-theme.config.ts",
+    "src/plugins/**/*.ts",
+    "src/lib/**/*.ts",
+    "src/styles/**/*.css"
+  ],
   "exclude": ["node_modules", "dist", "public"]
 }
