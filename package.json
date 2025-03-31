@@ -1,6 +1,6 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "dist/greenwood-spectrum-theme.js",
@@ -11,8 +11,8 @@
       "types": "./dist/greenwood-spectrum-theme.d.ts"
     },
     "./config": {
-      "import": "./dist/lib/config.js",
-      "types": "./dist/lib/config.d.ts"
+      "import": "./dist/src/lib/config.js",
+      "types": "./dist/src/lib/config.d.ts"
     }
   },
   "files": [
@@ -25,7 +25,7 @@
     "build": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood build",
     "build:debug": "NODE_OPTIONS='--trace-warnings --inspect --experimental-strip-types --import @greenwood/cli/register' greenwood build",
     "serve": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood serve",
-    "prepublish": "rm -rf dist/ && mkdir -p dist/lib && cp -r src/lib dist/ && cp src/greenwood-spectrum-theme.* dist/ && tsc --project tsconfig.publish.json && node fix-declarations.js"
+    "prepublish": "rm -rf dist/ && mkdir -p dist &&  tsc --project tsconfig.publish.json && node fix-declarations.js"
   },
   "devDependencies": {
     "@greenwood/cli": "0.32.0-alpha.8",
