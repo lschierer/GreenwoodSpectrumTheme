@@ -10,7 +10,7 @@
     "rewriteRelativeImportExtensions": true
   },
   "include": [
-    "src/greenwood-spectrum-theme.config.ts",
+    "./greenwood-spectrum-theme.ts",
     "src/plugins/**/*.ts",
     "src/lib/**/*.ts",
     "src/styles/**/*.css"
