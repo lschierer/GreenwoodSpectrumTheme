@@ -6,9 +6,9 @@ import { ExternalPluginFooterSection } from "./src/plugins/FooterSectionPlugin.t
 import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
 import { ExternalPluginSideBar } from "./src/plugins/SideBarPlugin.ts";
 
-import { Config } from "./src/lib/config.ts";
+import { type Config } from "./src/lib/config.ts";
 
-/*const SpectrumContextPlugin = (): ContextPlugin | ContextPlugin[] => {
+const SpectrumContextPlugin = (): ContextPlugin | ContextPlugin[] => {
   const env =
     process.env.__GWD_COMMAND__ === "develop" ? "development" : "production";
   return [
@@ -32,12 +32,13 @@ import { Config } from "./src/lib/config.ts";
       },
     },
   ] as ContextPlugin[];
-};*/
+};
 
 export const greenwoodSpectrumThemePack = (options: Config) => {
   return [
     DirectoryIndexSourcePlugin(),
     ExternalPluginFooterSection(options),
     ExternalPluginSideBar(),
+    SpectrumContextPlugin(),
   ];
 };
