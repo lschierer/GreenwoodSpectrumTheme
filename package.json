@@ -13,7 +13,9 @@
     "start": "NODE_OPTIONS='--import @greenwood/cli/register' greenwood develop",
     "build": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood build",
     "build:debug": "NODE_OPTIONS='--trace-warnings --inspect --experimental-strip-types --import @greenwood/cli/register' greenwood build",
-    "serve": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood serve"
+    "serve": "NODE_OPTIONS='--experimental-strip-types --import @greenwood/cli/register' greenwood serve",
+    "prepublish": "rm -rf dist/ && mkdir dist/ && rsync -rv --exclude 'pages/' src/ dist"
+
   },
   "devDependencies": {
     "@greenwood/cli": "0.32.0-alpha.8",

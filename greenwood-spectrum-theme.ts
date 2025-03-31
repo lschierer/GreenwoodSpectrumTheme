@@ -8,37 +8,36 @@ import { ExternalPluginSideBar } from "./src/plugins/SideBarPlugin.ts";
 
 import { type Config } from "./src/lib/config.ts";
 
-const SpectrumContextPlugin = (): ContextPlugin | ContextPlugin[] => {
-  const env =
-    process.env.__GWD_COMMAND__ === "develop" ? "development" : "production";
-  return [
-    {
-      type: "context",
-      provider: (compilation: Compilation): { layouts: URL[] } => {
-        const layouts: URL[] = new Array<URL>();
+export const SpectrumContextPlugin = () => {
+  const cp: ContextPlugin = {
+    type: "context",
+    name: "spectrum-theme-pack:context",
+    provider: (compilation: Compilation) => {
+      // you can use other directory names besides layouts/ this way!
+      const env =
+        process.env.__GWD_COMMAND__ === "develop"
+          ? "development"
+          : "production";
 
-        let layoutLocation: URL = new URL(import.meta.url);
-        if (!env.localeCompare("development")) {
-          layoutLocation = new URL(
-            "./src/layouts/",
-            compilation.context.userWorkspace,
-          );
-        } else {
-          layoutLocation = new URL("dist/layouts/", import.meta.url);
-        }
-        layouts.push(layoutLocation);
+      const layoutLocation =
+        env === "development"
+          ? new URL("./layouts/", compilation.context.userWorkspace)
+          : new URL("dist/layouts/", import.meta.url);
 
-        return { layouts };
-      },
+      return {
+        layouts: [layoutLocation],
+      };
     },
-  ] as ContextPlugin[];
+  };
+  return cp;
 };
 
 export const greenwoodSpectrumThemePack = (options: Config) => {
-  return [
-    DirectoryIndexSourcePlugin(),
-    ExternalPluginFooterSection(options),
-    ExternalPluginSideBar(),
-    SpectrumContextPlugin(),
-  ];
+  const pa: Plugin[] = new Array<Plugin>();
+  pa.push(SpectrumContextPlugin());
+  pa.push(DirectoryIndexSourcePlugin());
+  pa.push(...ExternalPluginSideBar(options));
+  pa.push(...ExternalPluginFooterSection(options));
+
+  return pa;
 };

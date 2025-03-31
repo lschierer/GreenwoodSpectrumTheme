@@ -10,11 +10,11 @@ const fileDebug: Record<string, boolean> = {
   "/components/sidebar.ts": false,
   "/components/theme.ts": false,
   "/greenwood-spectrum-theme.config.ts": false,
-  "/layouts/standard.ts": true,
-  "/lib/config.ts": true,
+  "/layouts/standard.ts": false,
+  "/lib/config.ts": false,
   "/lib/debug.ts": false,
   "/plugins/DirectoryIndexPlugin.ts": false,
-  "/plugins/FooterSectionPlugin.ts": true,
+  "/plugins/FooterSectionPlugin.ts": false,
   "/plugins/SideBarPlugin.ts": false,
 };
 

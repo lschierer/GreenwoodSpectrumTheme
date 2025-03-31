@@ -1,5 +1,6 @@
 import fs from "fs";
 import type { Compilation, Resource } from "@greenwood/cli";
+import process from "node:process";
 
 const packageDotJson = JSON.parse(
   fs.readFileSync("./package.json", "utf-8"),
@@ -9,7 +10,7 @@ const packageName = packageDotJson[
   "name" as keyof typeof packageDotJson
 ] as string;
 
-export class MyThemePackDevelopmentResource implements Resource {
+export class SpectrumThemePackResource implements Resource {
   extensions = new Array<string>();
   private compilation: Compilation;
   private options: object;
