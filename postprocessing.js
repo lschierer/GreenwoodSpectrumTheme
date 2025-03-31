@@ -3,6 +3,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import process from "node:process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, "dist");
@@ -21,6 +22,18 @@ function fixImportPaths(directory) {
       if (stat.isDirectory()) {
         fixImportPaths(filePath);
       } else if (file.endsWith(".ts") || file.endsWith(".js")) {
+        if (file.endsWith(".d.ts")) {
+          let content = fs.readFileSync(filePath, "utf8");
+          let modified = false;
+
+          const newContent = content.replace(/\.\/src\//g, () => {
+            modified = true;
+            return "./";
+          });
+          if (modified) {
+            fs.writeFileSync(filePath, newContent);
+          }
+        }
         let content = fs.readFileSync(filePath, "utf8");
         let modified = false;
 
@@ -28,11 +41,11 @@ function fixImportPaths(directory) {
         // But only if the consuming project will use JavaScript
         const newContent = content
           // Fix paths that reference src
-          .replace(/from\s+['"]\.\.\/src\//g, (match) => {
+          .replace(/from\s+"\.\.\/src\//g, () => {
             modified = true;
             return 'from "../';
           })
-          .replace(/import\s+['"]\.\.\/src\//g, (match) => {
+          .replace(/import\s+"\.\.\/src\//g, () => {
             modified = true;
             return 'import "../';
           })
