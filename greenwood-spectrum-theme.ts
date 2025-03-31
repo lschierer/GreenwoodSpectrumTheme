@@ -41,3 +41,5 @@ export const greenwoodSpectrumThemePack = (options: Config) => {
 
   return pa;
 };
+
+export { type Config } from "./src/lib/config.ts";
