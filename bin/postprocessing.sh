@@ -23,7 +23,7 @@ echo "Using $SED_CMD for text processing"
 rsync -a ./dist/src/ ./dist/
 rm -rf ./dist/src
 
-find ./dist -type f -exec $SED_CMD -i -E 's#from "(\.)+/src/(\w+)\.(ts|js)"#from "\1/\2.\3"#' {} \;
-find ./dist -type f -exec $SED_CMD -i -E 's#import "(\.)+/src/(\w+)\.(ts|js)"#import "\1/\2.\3"#' {} \;
+find ./dist -type f -exec $SED_CMD -i -E 's#from "(\.)+/src/([^"]+)\.(ts|js)"#from "\1/\2.\3"#' {} \;
+find ./dist -type f -exec $SED_CMD -i -E 's#import "(\.)+/src/([^"]+)\.(ts|js)"#import "\1/\2.\3"#' {} \;
 find ./dist -type f -exec $SED_CMD -i -e 's/imports: \[\(.*\)\.ts\(.*\)\]/imports: \[\1\.js\2\]/g' {} \;
-find ./dist -type f -iname '*.html' -exec $SED_CMD -i 's/src="\/components\/\(\w+\)\.ts"/src="\/components\/\1\.js"/g' {} \;
+find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="/components/([^"]+)\.ts"#src="/components/\1\.js"#g' {} \;
