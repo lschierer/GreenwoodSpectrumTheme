@@ -4,43 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/styles/global.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Micro+5&display=swap"
-      rel="stylesheet"
-    />
-
-    <script type="module" src="/components/theme.ts"></script>
-    <script type="module" src="/components/TopHeader.ts"></script>
-    <script
-      type="module"
-      data-gwd-opt="static"
-      src="/components/GlobalFooter.ts"
-    ></script>
-    <script type="module">
-      import "@spectrum-web-components/theme/sp-theme.js";
-      import "@spectrum-web-components/theme/src/themes.js";
-    </script>
   </head>
   <body>
-    <sp-theme class="spectrum-Typography">
-      <header>
-        <top-header
-          class="topHeader"
-          route="${globalThis.page.route}"
-        ></top-header>
-        <theme-component></theme-component>
-      </header>
-      <page-outlet></page-outlet>
-      <footer class="footer">
-        <span
-          id="copyright"
-          class="copyright spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light"
-        >
-          COPYRIGHTPLACEHOLDER
-        </span>
-      </footer>
-    </sp-theme>
+    <page-outlet></page-outlet>
   </body>
 </html>

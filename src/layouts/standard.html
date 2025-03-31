@@ -1,21 +1,58 @@
 <head>
+  <link rel="stylesheet" href="/styles/global.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Micro+5&display=swap"
+    rel="stylesheet"
+  />
+
+  <script type="module" src="/components/theme.ts"></script>
+  <script type="module" src="/components/TopHeader.ts"></script>
+  <script
+    type="module"
+    data-gwd-opt="static"
+    src="/components/GlobalFooter.ts"
+  ></script>
+  <script type="module">
+    import "@spectrum-web-components/theme/sp-theme.js";
+    import "@spectrum-web-components/theme/src/themes.js";
+  </script>
   <script type="module">
     import "@spectrum-web-components/split-view/sp-split-view.js";
   </script>
 </head>
 <body>
-  <div class="title section">
-    <h1 class="spectrum-Heading spectrum-Heading--sizeXXL">
-      ${globalThis.page.title}
-    </h1>
-  </div>
-
-  <sp-split-view resizable primary-size="20%">
-    <div class="nav"></div>
-    <div>
-      <main>
-        <content-outlet></content-outlet>
-      </main>
+  <sp-theme class="spectrum-Typography">
+    <header>
+      <top-header
+        class="topHeader"
+        route="${globalThis.page.route}"
+      ></top-header>
+      <theme-component></theme-component>
+    </header>
+    <
+    <div class="title section">
+      <h1 class="spectrum-Heading spectrum-Heading--sizeXXL">
+        ${globalThis.page.title}
+      </h1>
     </div>
-  </sp-split-view>
+
+    <sp-split-view resizable primary-size="20%">
+      <div class="nav"></div>
+      <div>
+        <main>
+          <content-outlet></content-outlet>
+        </main>
+      </div>
+    </sp-split-view>
+    <footer class="footer">
+      <span
+        id="copyright"
+        class="copyright spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light"
+      >
+        COPYRIGHTPLACEHOLDER
+      </span>
+    </footer>
+  </sp-theme>
 </body>
