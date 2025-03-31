@@ -5,7 +5,7 @@
     "emitDeclarationOnly": false,
     "sourceMap": true,
     "noEmit": false,
-    "outDir": "./dist/tempcan ",
+    "outDir": "./dist/temp",
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "rootDir": "."
