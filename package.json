@@ -1,13 +1,13 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "dist/greenwood-spectrum-theme.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/greenwood-spectrum-theme.ts",
+      "import": "./dist/greenwood-spectrum-theme.js",
       "types": "./dist/greenwood-spectrum-theme.d.ts"
     },
     "./config": {
