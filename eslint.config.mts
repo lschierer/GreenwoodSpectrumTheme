@@ -4,7 +4,7 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: [".greenwood/**", "./public/**", "./dist/**"],
+    ignores: ["**/.greenwood/**", "**/public/**", "**/dist/**"],
   },
   {
     extends: [
@@ -36,7 +36,7 @@ export default tseslint.config(
       },
       parserOptions: {
         projectService: {
-          allowDefaultProject: ["postcss.config.js"],
+          allowDefaultProject: ["fix-declarations.js", "postcss.config.js"],
         },
         tsconfigRootDir: import.meta.dirname,
         projectFolderIgnoreList: ["**/node_modules/**"],
@@ -44,7 +44,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*/*.js", "**/*/*.mjs"],
+    files: ["**/*/*.js", "**/*/*.mjs", "fix-declarations.js"],
     ignores: ["public/**"],
     extends: [eslint.configs.recommended, tseslint.configs.disableTypeChecked],
   },
