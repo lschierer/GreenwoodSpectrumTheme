@@ -27,5 +27,5 @@ find ./dist -type f -exec $SED_CMD -i -E 's#from "(\.)+/src/([^"]+)\.(ts|js)"#fr
 find ./dist -type f -exec $SED_CMD -i -E 's#import "(\.)+/src/([^"]+)\.(ts|js)"#import "\1/\2.\3"#' {} \;
 find ./dist -type f -exec $SED_CMD -i -E "s#imports: \['(.*)\.ts(.*)'\]#imports: \['.\1\.js\2'\]#g" {} \;
 # Fix component paths in HTML files to use absolute paths
-find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="./components/([^"]+)\.js"#src="/components/\1\.js"#g' {} \;
-find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="/src/components/([^"]+)\.ts"#src="/components/\1\.js"#g' {} \;
+find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="./components/([^"]+)\.js"#src="/node_modules/greenwoodspectrumtheme/components/\1\.js"#g' {} \;
+find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="/src/components/([^"]+)\.ts"#src="/node_modules/greenwoodspectrumtheme/components/\1\.js"#g' {} \;

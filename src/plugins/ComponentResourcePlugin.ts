@@ -38,9 +38,18 @@ export class ComponentResource implements Resource {
 
     const pathname = new URL(url, import.meta.url).pathname;
 
-    return this.componentsDirs.some(
-      (dir) => pathname.startsWith(dir) || pathname.includes("/components/"),
-    );
+    if (pathname.includes("greenwoodspectrumtheme")) {
+      console.log(
+        `ComponentResource shouldResolve detects path containing greenwoodspectrumtheme`,
+      );
+      if (pathname.includes("/components/")) {
+        console.log(
+          `ComponentResource shouldResolve detects path containing components`,
+        );
+        return true;
+      }
+    }
+    return false;
   }
 
   async resolve(url: URL) {
