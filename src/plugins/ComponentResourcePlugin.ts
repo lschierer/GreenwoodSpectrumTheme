@@ -78,7 +78,7 @@ export class ComponentResource implements Resource {
         ? parentDir === "dist"
           ? new URL(`../components/${componentName}`, import.meta.url)
           : new URL(
-              `./src/components/${componentName}${params}`,
+              `/components/${componentName}${params}`, // Use absolute path starting with /
               this.compilation.context.userWorkspace,
             )
         : new URL(`../components/${componentName}`, import.meta.url);
