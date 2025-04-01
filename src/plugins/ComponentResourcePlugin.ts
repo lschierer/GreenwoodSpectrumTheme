@@ -62,7 +62,7 @@ export class ComponentResource implements Resource {
       env === "development"
         ? parentDir === "dist"
           ? new URL(`./components/`, import.meta.url)
-          : new URL("./components/", this.compilation.context.userWorkspace)
+          : new URL("./src/components/", this.compilation.context.userWorkspace)
         : new URL(`./components/`, import.meta.url);
 
     console.log(`componentsLocation is ${componentsLocation}`);
@@ -78,7 +78,7 @@ export class ComponentResource implements Resource {
         ? parentDir === "dist"
           ? new URL(`../components/${componentName}`, import.meta.url)
           : new URL(
-              `./${workspaceUrl}${params}`,
+              `./src/components/${componentName}${params}`,
               this.compilation.context.userWorkspace,
             )
         : new URL(`../components/${componentName}`, import.meta.url);

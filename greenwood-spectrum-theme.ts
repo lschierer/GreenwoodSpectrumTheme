@@ -46,8 +46,9 @@ export const SpectrumContextPlugin = () => {
         env === "development"
           ? parentDir === "dist"
             ? new URL(`./components/`, import.meta.url)
-            : new URL("./components/", compilation.context.userWorkspace)
+            : new URL("./src/components/", compilation.context.userWorkspace)
           : new URL(`./components/`, import.meta.url);
+      console.log(`componentsLocation for spectrum-theme is ${componentsLocation}`);
       const context = {
         layouts: [layoutLocation],
         components: [componentsLocation],
