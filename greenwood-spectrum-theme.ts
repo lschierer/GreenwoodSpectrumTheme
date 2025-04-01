@@ -17,6 +17,7 @@ import { fileURLToPath } from "url";
 import { ExternalPluginFooterSection } from "./src/plugins/FooterSectionPlugin.ts";
 import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
 import { ExternalPluginSideBar } from "./src/plugins/SideBarPlugin.ts";
+import { ComponentResorcePluginProvider } from "./src/plugins/ComponentResourcePlugin.ts";
 
 import { type Config } from "./src/lib/config.ts";
 
@@ -40,9 +41,18 @@ export const SpectrumContextPlugin = () => {
             : new URL("./layouts/", compilation.context.userWorkspace)
           : new URL(`./layouts/`, import.meta.url);
       console.log(`layoutLocation for spectrum-theme is ${layoutLocation}`);
-      return {
+
+      const componentsLocation =
+        env === "development"
+          ? parentDir === "dist"
+            ? new URL(`./components/`, import.meta.url)
+            : new URL("./components/", compilation.context.userWorkspace)
+          : new URL(`./components/`, import.meta.url);
+      const context = {
         layouts: [layoutLocation],
+        components: [componentsLocation],
       };
+      return context;
     },
   };
   return cp;
@@ -62,6 +72,7 @@ export const greenwoodSpectrumThemePack = (options: Config) => {
   pa.push(...ExternalPluginSideBar(options));
   pa.push(...ExternalPluginFooterSection(options));
   pa.push(DirectoryIndexSourcePlugin());
+  pa.push(ComponentResorcePluginProvider(options));
   pa.push(SpectrumContextPlugin());
 
   return pa;
