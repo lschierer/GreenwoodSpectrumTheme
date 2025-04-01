@@ -11,6 +11,8 @@ import type {
 } from "@greenwood/cli";
 
 import process from "node:process";
+import { basename, dirname } from "node:path";
+import { fileURLToPath } from "url";
 
 import { ExternalPluginFooterSection } from "./src/plugins/FooterSectionPlugin.ts";
 import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
@@ -29,11 +31,15 @@ export const SpectrumContextPlugin = () => {
           ? "development"
           : "production";
 
+      const parentDir = basename(dirname(fileURLToPath(import.meta.url)));
+
       const layoutLocation =
         env === "development"
-          ? new URL("./layouts/", compilation.context.userWorkspace)
-          : new URL("dist/layouts/", import.meta.url);
-
+          ? parentDir === "dist"
+            ? new URL(`./layouts/`, import.meta.url)
+            : new URL("./layouts/", compilation.context.userWorkspace)
+          : new URL(`./layouts/`, import.meta.url);
+      console.log(`layoutLocation for spectrum-theme is ${layoutLocation}`);
       return {
         layouts: [layoutLocation],
       };
