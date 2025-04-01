@@ -90,6 +90,7 @@ export const DirectoryIndexSourcePlugin = (): SourcePlugin => {
                 <directory-index directory="${mr}"></directory-index>
               `,
             };
+            console.log(`created page ${mr}\n`, index);
             returnPages.push(index);
           }
         }
