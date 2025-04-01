@@ -1,6 +1,6 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.8.7-alpha.7",
+  "version": "0.8.7-alpha.8",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "dist/greenwood-spectrum-theme.js",
