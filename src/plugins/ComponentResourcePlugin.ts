@@ -63,7 +63,7 @@ export class ComponentResource implements Resource {
       process.env.__GWD_COMMAND__ === "develop" ? "development" : "production";
 
     const parentDir = basename(dirname(fileURLToPath(import.meta.url)));
-    const componentName = basename(fileURLToPath(pathname));
+    const componentName = basename(fileURLToPath(url));
 
     console.log(`componentName is ${componentName}`);
 
