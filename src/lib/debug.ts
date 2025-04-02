@@ -16,7 +16,7 @@ const fileDebug: Record<string, boolean> = {
   "/plugins/DirectoryIndexPlugin.ts": false,
   "/plugins/FooterSectionPlugin.ts": false,
   "/plugins/SideBarPlugin.ts": false,
-  "/plugins/ConfigFileProviderPlugin.ts": true,
+  "/plugins/ConfigFileProviderPlugin.ts": false,
 };
 
 function isAbsolutePath(path: string): boolean {

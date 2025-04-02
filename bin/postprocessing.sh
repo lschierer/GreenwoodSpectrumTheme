@@ -34,3 +34,5 @@ find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#import "(\.)+/(.*)\.ts
 # Fix component paths in HTML files to use absolute paths
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/components/([^"]+)\.(js|ts)"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/src/components/([^"]+)\.ts"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;
+
+cp ./src/greenwood-spectrum-theme.config.ts dist/

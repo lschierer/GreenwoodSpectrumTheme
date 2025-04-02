@@ -58,19 +58,24 @@ export type Config = z.infer<typeof Config>;
 
 const remoteLoad = async () => {
   let configResult: Config | undefined = undefined;
-  try {
-    const moduleResponse = await fetch(new URL(configPath, import.meta.url));
-    if (moduleResponse.ok) {
-      const data = (await moduleResponse.json()) as object;
-      const parsed = Config.safeParse(data);
-      if (!parsed.success) {
-        console.error(parsed.error.message);
-        throw new Error("Invalid config");
+  if (typeof fetch !== "undefined") {
+    try {
+      const moduleResponse = await fetch(new URL(configPath, import.meta.url));
+      if (moduleResponse.ok) {
+        const data = (await moduleResponse.json()) as object;
+        const parsed = Config.safeParse(data);
+        if (!parsed.success) {
+          console.error(parsed.error.message);
+          throw new Error("Invalid config");
+        }
+        configResult = parsed.data;
       }
-      configResult = parsed.data;
+    } catch (error) {
+      console.error("Failed to fetch remote config");
+      if (DEBUG) {
+        console.log(error);
+      }
     }
-  } catch (error) {
-    console.error("Failed to fetch remote config:", error);
   }
   return configResult;
 };
@@ -84,8 +89,13 @@ export async function loadConfig(
 
   let configResult: Config | undefined = undefined;
 
-  if (!import.meta.url.includes("dist")) {
+  if (
+    !import.meta.url.includes("dist") &&
+    !import.meta.url.includes("greenwoodspectrumtheme")
+  ) {
     if (!localConfig.length) {
+      console.warn(`using pack config file`);
+      console.log(`import.meta.url is ${import.meta.url}`);
       localConfig = "../greenwood-spectrum-theme.config.ts";
     }
     console.log(`import.meta.url does not have dist`);
