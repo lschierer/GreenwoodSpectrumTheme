@@ -24,6 +24,8 @@ plugins: [
 }
 ```
 
+![demo](./src/assets/spectrum-theme-demo.png)
+
 [Greenwood]: https://greenwoodjs.dev/
 [Theme Pack]: https://greenwoodjs.dev/guides/tutorials/theme-packs/
 [zod]: https://zod.dev/
