@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 import type { Compilation, Resource, ResourcePlugin } from "@greenwood/cli";
 
 import debugFunction from "../lib/debug.ts";
-import { type Config } from "../lib/config.ts";
+import { Config } from "../lib/config.ts";
 
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);
 if (DEBUG) {
@@ -15,14 +15,17 @@ if (DEBUG) {
 
 class FooterSectionResource implements Resource {
   private compilation: Compilation;
-  private options: Config;
+  private options: Config | undefined = undefined;
   private repo = process.cwd();
 
   private contentType;
 
-  constructor(compilation: Compilation, options: Config) {
+  constructor(compilation: Compilation, options: object) {
     this.compilation = compilation;
-    this.options = options;
+    const valid = Config.safeParse(options);
+    if (valid.success) {
+      this.options = valid.data;
+    }
 
     this.contentType = "text/html";
   }
@@ -111,7 +114,7 @@ class FooterSectionResource implements Resource {
       console.log(`start of getAuthors`);
     }
     const repoAuthors = new Set<string>();
-    if (Array.isArray(this.options.authors)) {
+    if (this.options && Array.isArray(this.options.authors)) {
       for (const author of this.options.authors) {
         repoAuthors.add(author);
       }

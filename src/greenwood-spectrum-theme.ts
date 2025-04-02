@@ -18,6 +18,7 @@ import { ExternalPluginFooterSection } from "./plugins/FooterSectionPlugin.ts";
 import { DirectoryIndexSourcePlugin } from "./plugins/DirectoryIndexPlugin.ts";
 import { ExternalPluginSideBar } from "./plugins/SideBarPlugin.ts";
 import { ComponentResorcePluginProvider } from "./plugins/ComponentResourcePlugin.ts";
+import { ThemeConfigSourcePagePlugin } from "./plugins/ConfigFileProviderPlugin.ts";
 
 import { type Config } from "./lib/config.ts";
 
@@ -62,6 +63,7 @@ export const greenwoodSpectrumThemePack = (options: Config) => {
     | RollupPlugin
     | ServerPlugin
   >();
+  pa.push(ThemeConfigSourcePagePlugin(options));
   pa.push(...ExternalPluginSideBar(options));
   pa.push(...ExternalPluginFooterSection(options));
   pa.push(DirectoryIndexSourcePlugin());

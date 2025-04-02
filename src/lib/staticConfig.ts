@@ -1,5 +1,5 @@
-import { loadConfig } from "./config.ts";
+import { type Config, loadConfig } from "./config.ts";
 
-const result = await loadConfig();
+const result = (await loadConfig()) as Config;
 
-export const config = Object.freeze(result);
+export const config = result;
