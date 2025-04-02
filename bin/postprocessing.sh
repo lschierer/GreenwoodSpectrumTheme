@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 # Determine which sed to use (gsed on macOS, sed on Linux)
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -20,12 +20,17 @@ echo "Using $SED_CMD for text processing"
 # Example usage:
 # $SED_CMD -i 's/pattern/replacement/g' file.txt
 
-rsync -a ./dist/src/ ./dist/
-rm -rf ./dist/src
+#rsync -a ./dist/src/ ./dist/
+#rm -rf ./dist/src
 
-find ./dist -type f -exec $SED_CMD -i -E 's#from "(\.)+/src/([^"]+)\.(ts|js)"#from "\1/\2.\3"#' {} \;
-find ./dist -type f -exec $SED_CMD -i -E 's#import "(\.)+/src/([^"]+)\.(ts|js)"#import "\1/\2.\3"#' {} \;
-find ./dist -type f -exec $SED_CMD -i -E "s#imports: \['(.*)\.ts(.*)'\]#imports: \['.\1\.js\2'\]#g" {} \;
+#find ./dist -type f -exec $SED_CMD -i -E 's#from "(\.)+/src/([^"]+)\.(ts|js)"#from "\1/\2.\3"#' {} \;
+#find ./dist -type f -exec $SED_CMD -i -E 's#import "(\.)+/src/([^"]+)\.(ts|js)"#import "\1\2.\3"#' {} \;
+#find ./dist -type f -exec $SED_CMD -i -E "s#imports: \['(.*)\.ts(.*)'\]#imports: \['.\1\.js\2'\]#g" {} \;
+
+# Fix imports in html generated inside .js files
+find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#from "(\.)+/(.*)\.ts#from "\1/\2.js#' {} \;
+find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#import "(\.)+/(.*)\.ts#import "\1/\2.js#' {} \;
+
 # Fix component paths in HTML files to use absolute paths
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/components/([^"]+)\.(js|ts)"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/src/components/([^"]+)\.ts"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;

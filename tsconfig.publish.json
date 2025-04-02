@@ -8,7 +8,7 @@
     "outDir": "./dist/",
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
-    "rootDir": "."
+    "rootDir": "./src"
   },
   "include": [
     "./greenwood-config.ts",

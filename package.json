@@ -3,8 +3,8 @@
   "version": "0.8.7-alpha.9",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
-  "main": "dist/greenwood-spectrum-theme.js",
-  "types": "dist/greenwood-spectrum-theme.d.ts",
+  "main": "./dist/greenwood-spectrum-theme.js",
+  "types": "./dist/greenwood-spectrum-theme.d.ts",
   "exports": {
     ".": {
       "import": "./dist/greenwood-spectrum-theme.js",
@@ -17,6 +17,21 @@
     "./components/*": {
       "import": "./dist/components/*.js",
       "types": "./dist/components/*.d.ts"
+    },
+    "./lib/*": {
+      "import": "./dist/lib/*.js",
+      "types": "./dist/lib/*.d.ts"
+    },
+    "./layouts/*": {
+      "import": "./dist/layouts/*.js",
+      "types": "./dist/layouts/*.d.ts"
+    },
+    "./plugins/*": {
+      "import": "./dist/plugins/*.js",
+      "types": "./dist/plugins/*.d.ts"
+    },
+    "./styles/*": {
+      "import": "./dist/styles/*.css"
     }
   },
   "files": [
