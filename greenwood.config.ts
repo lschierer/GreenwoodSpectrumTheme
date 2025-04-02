@@ -2,7 +2,7 @@ import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
 
 import type { Config } from "@greenwood/cli";
 
-import { greenwoodSpectrumThemePack } from "./greenwood-spectrum-theme.ts";
+import { greenwoodSpectrumThemePack } from "./src/greenwood-spectrum-theme.ts";
 //import { loadConfig } from "./src/lib/config.ts";
 import { config } from "./src/lib/staticConfig.ts";
 
