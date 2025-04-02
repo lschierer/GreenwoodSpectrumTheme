@@ -14,12 +14,12 @@ import process from "node:process";
 import { basename, dirname } from "node:path";
 import { fileURLToPath } from "url";
 
-import { ExternalPluginFooterSection } from "./src/plugins/FooterSectionPlugin.ts";
-import { DirectoryIndexSourcePlugin } from "./src/plugins/DirectoryIndexPlugin.ts";
-import { ExternalPluginSideBar } from "./src/plugins/SideBarPlugin.ts";
-import { ComponentResorcePluginProvider } from "./src/plugins/ComponentResourcePlugin.ts";
+import { ExternalPluginFooterSection } from "./plugins/FooterSectionPlugin.ts";
+import { DirectoryIndexSourcePlugin } from "./plugins/DirectoryIndexPlugin.ts";
+import { ExternalPluginSideBar } from "./plugins/SideBarPlugin.ts";
+import { ComponentResorcePluginProvider } from "./plugins/ComponentResourcePlugin.ts";
 
-import { type Config } from "./src/lib/config.ts";
+import { type Config } from "./lib/config.ts";
 
 export const SpectrumContextPlugin = () => {
   const cp: ContextPlugin = {
@@ -42,16 +42,8 @@ export const SpectrumContextPlugin = () => {
           : new URL(`./layouts/`, import.meta.url);
       console.log(`layoutLocation for spectrum-theme is ${layoutLocation}`);
 
-      const componentsLocation =
-        env === "development"
-          ? parentDir === "dist"
-            ? new URL(`./components/`, import.meta.url)
-            : new URL("./src/components/", compilation.context.userWorkspace)
-          : new URL(`./components/`, import.meta.url);
-      console.log(`componentsLocation for spectrum-theme is ${componentsLocation}`);
       const context = {
         layouts: [layoutLocation],
-        components: [componentsLocation],
       };
       return context;
     },
