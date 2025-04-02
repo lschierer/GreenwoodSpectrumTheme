@@ -4,11 +4,11 @@ import process from "node:process";
 import { basename, dirname } from "node:path";
 
 import type { Resource, ResourcePlugin, Compilation } from "@greenwood/cli";
-import debugFunction from "../lib/debug.ts";
 
+import debugFunction from "../lib/debug.ts";
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);
 if (DEBUG) {
-  console.log(`DEBUG enabled for ${new URL(import.meta.url).pathname}`);
+  console.log(`DEBUG for ${new URL(import.meta.url).pathname} is ${DEBUG}`);
 }
 
 export class ComponentResource implements Resource {
@@ -84,7 +84,16 @@ export class ComponentResource implements Resource {
       console.log(`url is ${url}`);
     }
     const urlPath = pathname;
-    const relativePath = urlPath.split("/").slice(3).join("/");
+    let relativePath = urlPath.split("/").slice(3).join("/");
+    if (
+      relativePath.startsWith("node_modules/greenwoodspectrumtheme/") &&
+      !relativePath.includes("/dist")
+    ) {
+      relativePath = relativePath.replace(
+        "node_modules/greenwoodspectrumtheme/",
+        "",
+      );
+    }
     if (DEBUG) {
       console.log(`relativePath is ${relativePath}`);
     }

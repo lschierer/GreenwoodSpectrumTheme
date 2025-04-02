@@ -11,7 +11,7 @@ const fileDebug: Record<string, boolean> = {
   "/layouts/_standard.ts": false,
   "/lib/config.ts": false,
   "/lib/debug.ts": false,
-  "/plugins/ComponentResourcePlugin.ts": false,
+  "/plugins/ComponentResourcePlugin.ts": true,
   "/plugins/DirectoryIndexPlugin.ts": false,
   "/plugins/FooterSectionPlugin.ts": false,
   "/plugins/SideBarPlugin.ts": false,
