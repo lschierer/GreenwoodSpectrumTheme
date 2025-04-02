@@ -11,7 +11,11 @@ import type {
   Page,
   ResourcePlugin,
 } from "@greenwood/cli";
-import { JSDOM } from "jsdom";
+import { unified } from "unified";
+import rehypeParse from "rehype-parse";
+import rehypeStringify from "rehype-stringify";
+import { visit } from "unist-util-visit";
+import type { Element } from "hast";
 
 type SideBarNode = Pick<Page, "id"> &
   Partial<Page> & {
@@ -48,49 +52,78 @@ class SideBarResource implements Resource {
   }
 
   async intercept(url: URL, request: Request, response: Response) {
-    let body = await response.text();
+    const body = await response.text();
+    const rootNode = this.buildRouteTree(this.compilation.graph);
+    const sidebarHtml = this.generateSidebarHTML(rootNode, url.pathname);
 
-    const dom = new JSDOM(body);
-    const document = dom.window.document;
-    const sidebarElement = document.querySelector("div.nav");
-    if (sidebarElement) {
-      const rootNode = this.buildRouteTree(this.compilation.graph);
-      const sidebarHtml = this.generateSidebarHTML(rootNode, url.pathname);
+    // Process HTML with unified/rehype
+    const file = await unified()
+      .use(rehypeParse, { fragment: false }) // Parse as full document
+      .use(() => (tree) => {
+        // Custom plugin to update sidebar element
+        visit(tree, "element", (node: Element) => {
+          if (
+            node.tagName === "div" &&
+            node.properties.className &&
+            Array.isArray(node.properties.className) &&
+            node.properties.className.includes("nav")
+          ) {
+            // Create element nodes from the sidebar HTML string
+            const tempTree = unified()
+              .use(rehypeParse, { fragment: true })
+              .parse(sidebarHtml);
 
-      // Insert the generated sidebar HTML
-      sidebarElement.innerHTML = sidebarHtml;
+            // Filter out any non-element content to ensure type compatibility
+            const elementNodes = tempTree.children.filter(
+              (child) => child.type === "element",
+            );
 
-      const headers = document.querySelector("head");
-      if (headers) {
-        const SpectrumCSSSideNav = document.createElement("link");
-        SpectrumCSSSideNav.setAttribute(
-          "href", // Fixed: src -> href for link elements
-          "/node_modules/@spectrum-css/sidenav/dist/index.css",
-        );
-        SpectrumCSSSideNav.setAttribute("rel", "stylesheet");
+            // Replace the node's children with the sidebar content
+            node.children = elementNodes;
+          }
+        });
 
-        const LocalSidebarCSS = document.createElement("link");
-        LocalSidebarCSS.setAttribute(
-          "href", // Fixed: src -> href
-          "/styles/sidebar.css",
-        );
-        LocalSidebarCSS.setAttribute("rel", "stylesheet");
+        // Add required CSS and script to head
+        visit(tree, "element", (node: Element) => {
+          if (node.tagName === "head") {
+            // Add Spectrum CSS for sidenav
+            node.children.push({
+              type: "element",
+              tagName: "link",
+              properties: {
+                href: "/node_modules/@spectrum-css/sidenav/dist/index.css",
+                rel: "stylesheet",
+              },
+              children: [],
+            });
 
-        headers.appendChild(SpectrumCSSSideNav);
-        headers.appendChild(LocalSidebarCSS);
+            // Add local sidebar CSS
+            node.children.push({
+              type: "element",
+              tagName: "link",
+              properties: {
+                href: "/styles/sidebar.css",
+                rel: "stylesheet",
+              },
+              children: [],
+            });
 
-        // Add iconify script for icons
-        const iconifyScript = document.createElement("script");
-        iconifyScript.setAttribute(
-          "src",
-          "https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js",
-        );
-        headers.appendChild(iconifyScript);
-      }
+            // Add iconify script
+            node.children.push({
+              type: "element",
+              tagName: "script",
+              properties: {
+                src: "https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js",
+              },
+              children: [],
+            });
+          }
+        });
+      })
+      .use(rehypeStringify)
+      .process(body);
 
-      body = dom.serialize();
-    }
-    return new Response(body, {
+    return new Response(String(file), {
       headers: response.headers,
     });
   }
@@ -125,7 +158,11 @@ class SideBarResource implements Resource {
       pageRoutes.add(page.route);
 
       //skip the auto generated 404 route
-      if (!page.route.localeCompare("/404/")) {
+      //skip the api routes
+      if (
+        !page.route.localeCompare("/404/") ||
+        page.route.startsWith("/api/")
+      ) {
         continue;
       }
 
@@ -141,8 +178,8 @@ class SideBarResource implements Resource {
 
     // First pass: create directory structure
     for (const page of pages) {
-      //skip the auto generated 404 route
-      if (!page.route.localeCompare("/404/")) {
+      //skip the auto generated 404 route and api routes
+      if (!page.route.localeCompare("/404/") || page.route.startsWith("/api/")) {
         continue;
       }
 

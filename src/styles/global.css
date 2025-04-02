@@ -15,7 +15,7 @@
 :root,
 ::backdrop,
 sp-theme {
-  --spectrum-background-base-color: var(--spectrum-gray-100);
+  --spectrum-background-base-color: var(--spectrum-gray-200);
   --mod-splitview-background-color: var(--spectrum-background-base-color);
   --sl-color-accent-high: var(--spectrum-cyan-1000);
   --sl-color-accent: var(--spectrum-cyan-700);

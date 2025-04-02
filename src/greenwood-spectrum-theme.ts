@@ -15,12 +15,18 @@ import { basename, dirname } from "node:path";
 import { fileURLToPath } from "url";
 
 import { ExternalPluginFooterSection } from "./plugins/FooterSectionPlugin.ts";
+import { TopHeaderSectionPlugin } from "./plugins/TopHeaderSectionPlugin.ts";
 import { DirectoryIndexSourcePlugin } from "./plugins/DirectoryIndexPlugin.ts";
 import { ExternalPluginSideBar } from "./plugins/SideBarPlugin.ts";
 import { ComponentResorcePluginProvider } from "./plugins/ComponentResourcePlugin.ts";
-import { ThemeConfigSourcePagePlugin } from "./plugins/ConfigFileProviderPlugin.ts";
 
 import { type Config } from "./lib/config.ts";
+import debugFunction from "./lib/debug.ts";
+
+const DEBUG = debugFunction(new URL(import.meta.url).pathname);
+if (DEBUG) {
+  console.log(`DEBUG enabled for ${new URL(import.meta.url).pathname}`);
+}
 
 export const SpectrumContextPlugin = () => {
   const cp: ContextPlugin = {
@@ -41,7 +47,9 @@ export const SpectrumContextPlugin = () => {
             ? new URL(`./layouts/`, import.meta.url)
             : new URL("./layouts/", compilation.context.userWorkspace)
           : new URL(`./layouts/`, import.meta.url);
-      console.log(`layoutLocation for spectrum-theme is ${layoutLocation}`);
+      if (DEBUG) {
+        console.log(`layoutLocation for spectrum-theme is ${layoutLocation}`);
+      }
 
       const context = {
         layouts: [layoutLocation],
@@ -63,9 +71,9 @@ export const greenwoodSpectrumThemePack = (options: Config) => {
     | RollupPlugin
     | ServerPlugin
   >();
-  pa.push(ThemeConfigSourcePagePlugin(options));
   pa.push(...ExternalPluginSideBar(options));
   pa.push(...ExternalPluginFooterSection(options));
+  pa.push(TopHeaderSectionPlugin(options));
   pa.push(DirectoryIndexSourcePlugin());
   pa.push(ComponentResorcePluginProvider(options));
   pa.push(SpectrumContextPlugin());

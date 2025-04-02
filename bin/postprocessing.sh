@@ -30,9 +30,12 @@ echo "Using $SED_CMD for text processing"
 # Fix imports in html generated inside .js files
 find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#from "(\.)+/(.*)\.ts#from "\1/\2.js#' {} \;
 find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#import "(\.)+/(.*)\.ts#import "\1/\2.js#' {} \;
+find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#src: "/components/(.+).ts"#src: "/node_modules/greenwoodspectrumtheme/components/\1.js"#' {} \;
+find ./dist -type f -iname '*.js' -exec $SED_CMD -i -E 's#href: "/styles/(.+).css"#href: "/node_modules/greenwoodspectrumtheme/styles/\1.css"#' {} \;
 
 # Fix component paths in HTML files to use absolute paths
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/components/([^"]+)\.(js|ts)"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;
 find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#src="(\.)*/src/components/([^"]+)\.ts"#src="/node_modules/greenwoodspectrumtheme/components/\2\.js"#g' {} \;
+find ./dist -type f -iname '*.html' -exec $SED_CMD -i -E 's#href="(\.)*/styles/([^"]+)\.css"#href="/node_modules/greenwoodspectrumtheme/styles/\2\.css"#g' {} \;
 
 cp ./src/greenwood-spectrum-theme.config.ts dist/

@@ -1,7 +1,11 @@
 import git from "isomorphic-git";
 import fs from "node:fs";
 import process from "node:process";
-import { JSDOM } from "jsdom";
+import { unified } from "unified";
+import rehypeParse from "rehype-parse";
+import rehypeStringify from "rehype-stringify";
+import { visit } from "unist-util-visit";
+import type { Element } from "hast";
 
 import type { Compilation, Resource, ResourcePlugin } from "@greenwood/cli";
 
@@ -46,39 +50,74 @@ class FooterSectionResource implements Resource {
   }
 
   async intercept(url: URL, request: Request, response: Response) {
-    let body = await response.text();
+    const body = await response.text();
+    const authors = await this.getAuthors();
+    const firstYear = await this.getFirstYear();
+    const today = new Date();
 
-    const dom = new JSDOM(body);
-    const document = dom.window.document;
-    const footerCopyrightElement = document.querySelector("#copyright");
-    if (footerCopyrightElement) {
-      if (DEBUG) {
-        console.log(`found footerCopyrightElement for ${url.pathname}`);
-      }
-      const authors: string | string[] = await this.getAuthors();
-      const firstYear = await this.getFirstYear();
-      const today = new Date();
-      if (firstYear.getFullYear() == today.getFullYear()) {
-        footerCopyrightElement.textContent = `©${today.getFullYear()} ${Array.isArray(authors) ? authors.map((a: string) => a).join(", ") : authors}`;
-      } else {
-        footerCopyrightElement.textContent = `©${firstYear.getFullYear()} - ${today.getFullYear()} ${Array.isArray(authors) ? authors.map((a: string) => a).join(", ") : authors}`;
-      }
-      body = dom.serialize();
+    let copyrightText;
+    if (firstYear.getFullYear() == today.getFullYear()) {
+      copyrightText = `©${today.getFullYear()} ${Array.isArray(authors) ? authors.map((a: string) => a).join(", ") : authors}`;
     } else {
-      if (DEBUG) {
-        console.log(`no footerCopyrightElement for ${url.pathname}`);
-      }
-      if (DEBUG && url.pathname.startsWith("/testDir")) {
-        console.log(body);
-      }
+      copyrightText = `©${firstYear.getFullYear()} - ${today.getFullYear()} ${Array.isArray(authors) ? authors.map((a: string) => a).join(", ") : authors}`;
     }
 
-    body = dom.serialize();
-    return new Response(body, {
+    // Process HTML with unified/rehype
+    const file = await unified()
+      .use(rehypeParse, { fragment: false })
+      .use(() => (tree) => {
+        visit(tree, "element", (node: Element) => {
+          if (
+            node.tagName === "div" &&
+            node.properties.className &&
+            Array.isArray(node.properties.className) &&
+            node.properties.className.includes("footer")
+          ) {
+            const tempTree = unified()
+              .use(rehypeParse, { fragment: true })
+              .parse(this.getPrivacyPolicy());
+            const en = tempTree.children.filter(
+              (child) => child.type === "element",
+            );
+            node.children = en;
+          }
+        });
+        visit(tree, "element", (node: Element) => {
+          if ("id" in node.properties && node.properties.id === "copyright") {
+            if (DEBUG) {
+              console.log(`found footerCopyrightElement for ${url.pathname}`);
+            }
+            // Clear existing children and add new text node
+            node.children = [
+              {
+                type: "text",
+                value: copyrightText,
+              },
+            ];
+          }
+        });
+      })
+      .use(rehypeStringify)
+      .process(body);
+
+    return new Response(String(file), {
       headers: response.headers,
     });
   }
 
+  protected getPrivacyPolicy = () => {
+    if (this.options && this.options.privacyPolicy) {
+      return `
+        <span class="privacy spectrum-Detail spectrum-Detail--serif spectrum-Detail--sizeM spectrum-Detail--light">
+          <a href="${this.options.privacyPolicy}" class="spectrum-Link spectrum-Link--quiet spectrum-Link--primary">
+            Privacy Policy
+          </a>
+        </span>
+      `;
+    } else {
+      return "";
+    }
+  };
   protected getFirstYear = async () => {
     if (DEBUG) {
       console.log(`start of getFirstYear`);
@@ -94,9 +133,11 @@ class FooterSectionResource implements Resource {
         if (DEBUG) {
           console.error(`Error getting commit history: `, error);
         }
+        // Return empty array to handle the error case properly
+        return [];
       })
       .then((gitlog) => {
-        if (gitlog) {
+        if (gitlog.length) {
           for (const entry of gitlog) {
             const EntryDate = new Date(entry.commit.author.timestamp * 1000);
             const EntryYear = EntryDate.getFullYear();
@@ -131,7 +172,7 @@ class FooterSectionResource implements Resource {
           }
         })
         .then((gitlog) => {
-          if (gitlog) {
+          if (gitlog?.length) {
             for (const entry of gitlog) {
               repoAuthors.add(entry.commit.author.name);
             }
@@ -143,17 +184,6 @@ class FooterSectionResource implements Resource {
   };
 }
 
-/* this will infinitally hang greenwood with no console output
-const ExternalPluginFooterSection = (options = {}): ResourcePlugin => {
-  return {
-    type: "resource",
-    name: "external-plugin-footersecton",
-    provider: (compilation) => new FooterSectionResource(compilation, options),
-  };
-};
-*/
-
-//This version differs only in that it wraps the return in an array. it works fine.
 const ExternalPluginFooterSection = (options: Config): ResourcePlugin[] => {
   return [
     {

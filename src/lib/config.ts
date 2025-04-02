@@ -1,5 +1,3 @@
-const configPath = "/api/greenwoodspectrumtheme/config";
-
 import { z } from "zod";
 
 import debugFunction from "./debug.ts";
@@ -56,66 +54,16 @@ export const Config = z.object({
 });
 export type Config = z.infer<typeof Config>;
 
-const remoteLoad = async () => {
-  let configResult: Config | undefined = undefined;
-  if (typeof fetch !== "undefined") {
-    try {
-      const moduleResponse = await fetch(new URL(configPath, import.meta.url));
-      if (moduleResponse.ok) {
-        const data = (await moduleResponse.json()) as object;
-        const parsed = Config.safeParse(data);
-        if (!parsed.success) {
-          console.error(parsed.error.message);
-          throw new Error("Invalid config");
-        }
-        configResult = parsed.data;
-      }
-    } catch (error) {
-      console.error("Failed to fetch remote config");
-      if (DEBUG) {
-        console.log(error);
-      }
-    }
-  }
-  return configResult;
-};
-
-export async function loadConfig(
-  localConfig: string = "",
-): Promise<Config | undefined> {
+export function loadConfig(localConfig: object = {}): Config | undefined {
   if (DEBUG) {
     console.log(`loadConfig start`);
   }
 
-  let configResult: Config | undefined = undefined;
-
-  if (
-    !import.meta.url.includes("dist") &&
-    !import.meta.url.includes("greenwoodspectrumtheme")
-  ) {
-    if (!localConfig.length) {
-      console.warn(`using pack config file`);
-      console.log(`import.meta.url is ${import.meta.url}`);
-      localConfig = "../greenwood-spectrum-theme.config.ts";
-    }
-    console.log(`import.meta.url does not have dist`);
-    const module = (await import(
-      new URL(localConfig, import.meta.url).href
-    )) as object;
-    const config = "default" in module ? module.default : module;
-    const parsed = Config.safeParse(config);
-    if (parsed.success) {
-      console.log(`successful config file parse`);
-      configResult = parsed.data;
-      return configResult;
-    } else {
-      console.error(parsed.error.message);
-      throw new Error("Invalid Local Config");
-      return undefined;
-    }
+  const valid = Config.safeParse(localConfig);
+  if (valid.success) {
+    return valid.data;
   } else {
-    configResult = await remoteLoad();
+    console.error(valid.error.message);
+    throw new Error("Invalid config");
   }
-
-  return configResult;
 }

@@ -79,18 +79,23 @@ export const DirectoryIndexSourcePlugin = (): SourcePlugin => {
           if (!missing.startsWith("api")) {
             const mr = `/${missing}/`;
             const baseTitle = path.basename(missing);
+            const DIPath = import.meta.url.includes("/dist/")
+              ? "/node_modules/greenwoodspectrumtheme/components/DirectoryIndex.js"
+              : "/components/DirectoryIndex.ts";
             const index: ExternalSourcePage = {
               title: baseTitle,
               label: baseTitle,
               id: baseTitle,
               route: mr,
               layout: "standard",
-              imports: ['/components/DirectoryIndex.ts type="module"'],
+              imports: [`${DIPath} type="module"`],
               body: `
                 <directory-index directory="${mr}"></directory-index>
               `,
             };
-            console.log(`created page ${mr}\n`, index);
+            if (DEBUG) {
+              console.log(`created page ${mr}\n`, index);
+            }
             returnPages.push(index);
           }
         }

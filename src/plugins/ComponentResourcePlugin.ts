@@ -4,6 +4,12 @@ import process from "node:process";
 import { basename, dirname } from "node:path";
 
 import type { Resource, ResourcePlugin, Compilation } from "@greenwood/cli";
+import debugFunction from "../lib/debug.ts";
+
+const DEBUG = debugFunction(new URL(import.meta.url).pathname);
+if (DEBUG) {
+  console.log(`DEBUG enabled for ${new URL(import.meta.url).pathname}`);
+}
 
 export class ComponentResource implements Resource {
   private compilation: Compilation;
@@ -39,9 +45,11 @@ export class ComponentResource implements Resource {
     const pathname = new URL(url, import.meta.url).pathname;
 
     if (pathname.includes("greenwoodspectrumtheme")) {
-      console.log(
-        `ComponentResource shouldResolve detects path containing greenwoodspectrumtheme`,
-      );
+      if (DEBUG) {
+        console.log(
+          `ComponentResource shouldResolve detects path containing greenwoodspectrumtheme`,
+        );
+      }
       // Check for all resource types from your theme
       if (
         pathname.includes("/components/") ||
@@ -49,10 +57,12 @@ export class ComponentResource implements Resource {
         pathname.includes("/styles/") ||
         pathname.includes("/layouts/")
       ) {
-        console.log(
-          `ComponentResource shouldResolve detects resource path `,
-          `returning true for ${url.pathname}`,
-        );
+        if (DEBUG) {
+          console.log(
+            `ComponentResource shouldResolve detects resource path `,
+            `returning true for ${url.pathname}`,
+          );
+        }
 
         return true;
       }
@@ -70,16 +80,22 @@ export class ComponentResource implements Resource {
     const env =
       process.env.__GWD_COMMAND__ === "develop" ? "development" : "production";
 
-    console.log(`url is ${url}`);
+    if (DEBUG) {
+      console.log(`url is ${url}`);
+    }
     const urlPath = pathname;
     const relativePath = urlPath.split("/").slice(3).join("/");
-    console.log(`relativePath is ${relativePath}`);
+    if (DEBUG) {
+      console.log(`relativePath is ${relativePath}`);
+    }
 
     const parentDir = dirname(fileURLToPath(import.meta.url));
     const grandParentDir = basename(dirname(parentDir));
-    console.log(
-      `import.meta.url is ${import.meta.url};\nparentDir is ${parentDir}`,
-    );
+    if (DEBUG) {
+      console.log(
+        `import.meta.url is ${import.meta.url};\nparentDir is ${parentDir}`,
+      );
+    }
 
     const params = searchParams.size > 0 ? `?${searchParams.toString()}` : "";
 
@@ -87,7 +103,9 @@ export class ComponentResource implements Resource {
     let componentsURL: URL | string = "";
     if (env === "development") {
       if (grandParentDir === "dist") {
-        console.log(`dev mode with grandparent dist`);
+        if (DEBUG) {
+          console.log(`dev mode with grandparent dist`);
+        }
         workspaceRoot = grandParentDir;
         if (!pathname.includes("plugins")) {
           componentsURL = new URL(
@@ -101,9 +119,11 @@ export class ComponentResource implements Resource {
           );
         }
       } else {
-        console.log(
-          `dev mode with grandparent dir ${grandParentDir} and parent ${parentDir}`,
-        );
+        if (DEBUG) {
+          console.log(
+            `dev mode with grandparent dir ${grandParentDir} and parent ${parentDir}`,
+          );
+        }
         workspaceRoot = this.compilation.context.userWorkspace;
         if (!pathname.includes("plugins")) {
           componentsURL = new URL(
@@ -131,9 +151,10 @@ export class ComponentResource implements Resource {
       }
     }
 
-    console.log(`workspaceRoot is ${workspaceRoot}`);
-
-    console.log(`componentsURL is ${componentsURL.toString()}`);
+    if (DEBUG) {
+      console.log(`workspaceRoot is ${workspaceRoot}`);
+      console.log(`componentsURL is ${componentsURL.toString()}`);
+    }
     return new Request(componentsURL);
   }
 }

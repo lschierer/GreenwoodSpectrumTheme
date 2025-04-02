@@ -1,6 +1,6 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.8.7-alpha.11",
+  "version": "0.9.0",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "./dist/greenwood-spectrum-theme.js",
@@ -50,6 +50,7 @@
     "@greenwood/cli": "0.32.0-alpha.8",
     "@greenwood/plugin-postcss": "0.32.0-alpha.8",
     "@tsconfig/node22": "^22.0.1",
+    "@types/hast": "^3.0.4",
     "@types/jsdom": "^21.1.7",
     "@typescript-eslint/eslint-plugin": "^8.28.0",
     "@typescript-eslint/parser": "^8.28.0",
@@ -100,7 +101,10 @@
     "greenwoodspectrumtheme": "link:",
     "iconify-icon": "^2.3.0",
     "isomorphic-git": "^1.30.1",
-    "jsdom": "^26.0.0",
+    "rehype-parse": "^9.0.1",
+    "rehype-stringify": "^10.0.1",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
     "zod": "^3.24.2"
   }
 }

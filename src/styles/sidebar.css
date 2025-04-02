@@ -8,6 +8,7 @@
   /* Core Spectrum variables for sidenav */
   --mod-sidenav-indent: 1rem; /* Controls indentation between levels */
   --mod-sidenav-item-padding-x: 0.5rem; /* Horizontal padding for items */
+  --mod-sidenav-item-padding-y: 1px;
   --mod-sidenav-item-gap: 0.5rem; /* Gap between icon and text */
 
   /* Colors */

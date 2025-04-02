@@ -2,7 +2,9 @@ import type { GetLayout, Compilation, Page } from "@greenwood/cli";
 
 import debugFunction from "../lib/debug.ts";
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);
-console.log(`DEBUG is ${DEBUG} for ${new URL(import.meta.url).pathname}`);
+if (DEBUG) {
+  console.log(`DEBUG is ${DEBUG} for ${new URL(import.meta.url).pathname}`);
+}
 
 export const getLayout: GetLayout = async (
   compilation: Compilation,
