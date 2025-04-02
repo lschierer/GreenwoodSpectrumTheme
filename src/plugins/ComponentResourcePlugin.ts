@@ -42,10 +42,18 @@ export class ComponentResource implements Resource {
       console.log(
         `ComponentResource shouldResolve detects path containing greenwoodspectrumtheme`,
       );
-      if (pathname.includes("/components/")) {
+      // Check for all resource types from your theme
+      if (
+        pathname.includes("/components/") ||
+        pathname.includes("/lib/") ||
+        pathname.includes("/styles/") ||
+        pathname.includes("/layouts/")
+      ) {
         console.log(
-          `ComponentResource shouldResolve detects path containing components`,
+          `ComponentResource shouldResolve detects resource path `,
+          `returning true for ${url.pathname}`,
         );
+
         return true;
       }
     }
@@ -62,35 +70,70 @@ export class ComponentResource implements Resource {
     const env =
       process.env.__GWD_COMMAND__ === "develop" ? "development" : "production";
 
-    const parentDir = basename(dirname(fileURLToPath(import.meta.url)));
-    const componentName = basename(fileURLToPath(url));
+    console.log(`url is ${url}`);
+    const urlPath = pathname;
+    const relativePath = urlPath.split("/").slice(3).join("/");
+    console.log(`relativePath is ${relativePath}`);
 
-    console.log(`componentName is ${componentName}`);
-
-    const componentsLocation =
-      env === "development"
-        ? parentDir === "dist"
-          ? new URL(`./components/`, import.meta.url)
-          : new URL("./src/components/", this.compilation.context.userWorkspace)
-        : new URL(`./components/`, import.meta.url);
-
-    console.log(`componentsLocation is ${componentsLocation}`);
-
-    const workspaceUrl = pathname.split(`/node_modules/${parentDir}/dist/`)[1];
-
-    console.log(`workspaceUrl is ${workspaceUrl}`);
+    const parentDir = dirname(fileURLToPath(import.meta.url));
+    const grandParentDir = basename(dirname(parentDir));
+    console.log(
+      `import.meta.url is ${import.meta.url};\nparentDir is ${parentDir}`,
+    );
 
     const params = searchParams.size > 0 ? `?${searchParams.toString()}` : "";
 
-    const componentsURL =
-      env === "development"
-        ? parentDir === "dist"
-          ? new URL(`../components/${componentName}`, import.meta.url)
-          : new URL(
-              `/components/${componentName}${params}`, // Use absolute path starting with /
-              this.compilation.context.userWorkspace,
-            )
-        : new URL(`../components/${componentName}`, import.meta.url);
+    let workspaceRoot: URL | string = "";
+    let componentsURL: URL | string = "";
+    if (env === "development") {
+      if (grandParentDir === "dist") {
+        console.log(`dev mode with grandparent dist`);
+        workspaceRoot = grandParentDir;
+        if (!pathname.includes("plugins")) {
+          componentsURL = new URL(
+            `../${relativePath}${params}`,
+            import.meta.url,
+          );
+        } else {
+          componentsURL = new URL(
+            `./${workspaceRoot}/${relativePath}${params}`,
+            import.meta.url,
+          );
+        }
+      } else {
+        console.log(
+          `dev mode with grandparent dir ${grandParentDir} and parent ${parentDir}`,
+        );
+        workspaceRoot = this.compilation.context.userWorkspace;
+        if (!pathname.includes("plugins")) {
+          componentsURL = new URL(
+            `../${workspaceRoot}/${relativePath}${params}`,
+            this.compilation.context.userWorkspace,
+          );
+        } else {
+          componentsURL = new URL(
+            `./${workspaceRoot}/${relativePath}${params}`,
+            this.compilation.context.userWorkspace,
+          );
+        }
+      }
+    } else {
+      if (!pathname.includes("plugins")) {
+        componentsURL = new URL(
+          `../${workspaceRoot}/${relativePath}${params}`,
+          url,
+        );
+      } else {
+        componentsURL = new URL(
+          `./${workspaceRoot}/${relativePath}${params}`,
+          url,
+        );
+      }
+    }
+
+    console.log(`workspaceRoot is ${workspaceRoot}`);
+
+    console.log(`componentsURL is ${componentsURL.toString()}`);
     return new Request(componentsURL);
   }
 }
