@@ -27,6 +27,10 @@ class TopHeaderSectionResource implements Resource {
     const valid = Config.safeParse(options);
     if (valid.success) {
       this.options = valid.data;
+    } else {
+      if (DEBUG) {
+        console.error(`missing options for TopHeaderSectionResource`);
+      }
     }
 
     this.contentType = "text/html";
@@ -73,12 +77,16 @@ class TopHeaderSectionResource implements Resource {
       `assets/${logoPath}`,
       this.compilation.context.userWorkspace,
     );
-    console.log(
-      `compilation.context is ${JSON.stringify(this.compilation.context)}`,
-    );
-    console.log(`myLogoURL is ${myLogoURL}`);
+    if (DEBUG) {
+      console.log(
+        `compilation.context is ${JSON.stringify(this.compilation.context)}`,
+      );
+      console.log(`myLogoURL is ${myLogoURL}`);
+    }
     const myLogoPath = fileURLToPath(myLogoURL);
-    console.log(`myLogoPath is ${myLogoPath}`);
+    if (DEBUG) {
+      console.log(`myLogoPath is ${myLogoPath}`);
+    }
     const myLogo = fs.readFileSync(myLogoPath, "utf-8");
     return `
       <div class=" site-logo spectrum-Heading spectrum-Heading--sizeXXL">
@@ -98,6 +106,9 @@ class TopHeaderSectionResource implements Resource {
 
   private getSiteTitle = () => {
     const siteTitle = this.options ? this.options.siteTitle : "";
+    if (DEBUG) {
+      console.log(`siteTitle is ${siteTitle}`);
+    }
     const siteLogo = this.options
       ? this.options.siteLogo
         ? this.options.siteLogo.endsWith(".svg")
@@ -113,10 +124,11 @@ class TopHeaderSectionResource implements Resource {
         <span class="siteTitle spectrum-Heading spectrum-Heading--sizeXXL">
           ${siteTitle}
         </span>
-      <a href='/' class="site-title ">
+      </a>
     </span>
     `;
   };
+
   private getSection = () => {
     return `
       <div class="header">

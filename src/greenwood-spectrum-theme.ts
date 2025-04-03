@@ -20,7 +20,7 @@ import { DirectoryIndexSourcePlugin } from "./plugins/DirectoryIndexPlugin.ts";
 import { ExternalPluginSideBar } from "./plugins/SideBarPlugin.ts";
 import { ComponentResorcePluginProvider } from "./plugins/ComponentResourcePlugin.ts";
 
-import { type Config } from "./lib/config.ts";
+import { Config } from "./lib/config.ts";
 import debugFunction from "./lib/debug.ts";
 
 const DEBUG = debugFunction(new URL(import.meta.url).pathname);
@@ -61,6 +61,13 @@ export const SpectrumContextPlugin = () => {
 };
 
 export const greenwoodSpectrumThemePack = (options: Config) => {
+  const valid = Config.safeParse(options);
+  if (!valid.success && DEBUG) {
+    console.error(
+      `invalid options for greenwoodSpectrumThemePack: `,
+      valid.error.message,
+    );
+  }
   const pa = new Array<
     | SourcePlugin
     | AdapterPlugin
