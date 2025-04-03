@@ -4,6 +4,9 @@ import rehypeStringify from "rehype-stringify";
 import { visit } from "unist-util-visit";
 import type { Element } from "hast";
 
+import { fileURLToPath } from "node:url";
+import * as fs from "node:fs";
+
 import type { Compilation, Resource, ResourcePlugin } from "@greenwood/cli";
 
 import debugFunction from "../lib/debug.ts";
@@ -64,38 +67,62 @@ class TopHeaderSectionResource implements Resource {
         : ""
       : "";
   };
+
+  private getSvgLogo = (logoPath: string) => {
+    const myLogoURL = new URL(
+      `assets/${logoPath}`,
+      this.compilation.context.userWorkspace,
+    );
+    console.log(
+      `compilation.context is ${JSON.stringify(this.compilation.context)}`,
+    );
+    console.log(`myLogoURL is ${myLogoURL}`);
+    const myLogoPath = fileURLToPath(myLogoURL);
+    console.log(`myLogoPath is ${myLogoPath}`);
+    const myLogo = fs.readFileSync(myLogoPath, "utf-8");
+    return `
+      <div class=" site-logo spectrum-Heading spectrum-Heading--sizeXXL">
+        ${myLogo}
+      </div>
+    `;
+  };
+
+  private getImgLogo = (logoPath: string, altText: string) => {
+    return `
+      <img
+        alt=${altText}
+        src=${logoPath}
+      />
+    `;
+  };
+
   private getSiteTitle = () => {
+    const siteTitle = this.options ? this.options.siteTitle : "";
     const siteLogo = this.options
       ? this.options.siteLogo
         ? this.options.siteLogo.endsWith(".svg")
-          ? this.options.siteLogo
-          : `
-        <img
-          alt=${this.options.siteLogoAltText ?? ""}
-          src=${this.options.siteLogo}
-        />
-        `
+          ? this.getSvgLogo(this.options.siteLogo)
+          : this.getImgLogo(this.options.siteLogo, siteTitle)
         : ""
       : "";
 
-    const siteTitle = this.options ? this.options.siteTitle : "";
-
     return `
-    <a href='/' class="site-title ">
-      <span class="spectrum-Heading spectrum-Heading--sizeXXXL">
+    <span class="spectrum-Heading spectrum-Heading--sizeXS">
+      <a href='/' class="site-title ">
         ${siteLogo}
-      </span>
-      <span class="siteTitle spectrum-Heading spectrum-Heading--sizeXXXL">
-        ${siteTitle}
-      </span>
-    <a href='/' class="site-title ">
-
+        <span class="siteTitle spectrum-Heading spectrum-Heading--sizeXXL">
+          ${siteTitle}
+        </span>
+      <a href='/' class="site-title ">
+    </span>
     `;
   };
   private getSection = () => {
     return `
       <div class="header">
-        ${this.getSiteTitle()}
+        <div class="site-title-section">
+          ${this.getSiteTitle()}
+        </div>
         <div class="nav">
           ${this.getNavSection()}
         </div>

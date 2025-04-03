@@ -1,4 +1,5 @@
 import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
+import { greenwoodPluginImportRaw } from "@greenwood/plugin-import-raw";
 
 import type { Config } from "@greenwood/cli";
 
@@ -27,6 +28,7 @@ export default {
     },
   },
   plugins: [
+    greenwoodPluginImportRaw(),
     greenwoodSpectrumThemePack(config),
 
     greenwoodPluginPostCss({

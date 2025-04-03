@@ -102,6 +102,9 @@ importers:
       '@greenwood/cli':
         specifier: 0.32.0-alpha.8
         version: 0.32.0-alpha.8
+      '@greenwood/plugin-import-raw':
+        specifier: 0.32.0-alpha.8
+        version: 0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)
       '@greenwood/plugin-postcss':
         specifier: 0.32.0-alpha.8
         version: 0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)
@@ -487,6 +490,11 @@ packages:
     resolution: {integrity: sha512-VArE4iUcKfXA46Wra7ADZqRfRTDvxHcNP2WmKS1H38ITstwHM9gykI1tvpQpait2667bEebzrrC4JwjiJqivSg==}
     engines: {node: ^18.20.5 || ^20.18.3 || >=22.12.0}
     hasBin: true
+
+  '@greenwood/plugin-import-raw@0.32.0-alpha.8':
+    resolution: {integrity: sha512-s+8LTO0SYXlcLq8+Rmpl1KXkpks4bE/lfntMJwGLzeoifWS6/VTfKknyUr9yBXmE/xoW0Es39Q9f+/W4FpJzXA==}
+    peerDependencies:
+      '@greenwood/cli': ^0.31.0
 
   '@greenwood/plugin-postcss@0.32.0-alpha.8':
     resolution: {integrity: sha512-VatTgJ+r8tFFmHhItzTg+bqdgcNHZnerZKV/Z8IOv6EGAwsjACyUeE3hF3Q1XdZcJPyXRW0YBlRZjooJH1OLvQ==}
@@ -4076,6 +4084,10 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@greenwood/plugin-import-raw@0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)':
+    dependencies:
+      '@greenwood/cli': 0.32.0-alpha.8
 
   '@greenwood/plugin-postcss@0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)':
     dependencies:

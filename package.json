@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@greenwood/cli": "0.32.0-alpha.8",
+    "@greenwood/plugin-import-raw": "0.32.0-alpha.8",
     "@greenwood/plugin-postcss": "0.32.0-alpha.8",
     "@tsconfig/node22": "^22.0.1",
     "@types/hast": "^3.0.4",

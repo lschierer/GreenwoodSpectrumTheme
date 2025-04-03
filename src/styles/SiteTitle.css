@@ -1,3 +1,7 @@
+div.header {
+  --mod-heading-margin-start: 2px;
+}
+
 .site-title {
   align-items: center;
   font-weight: 600;
@@ -7,18 +11,33 @@
   display: flex;
   flex-direction: row;
 }
+
+.site-logo {
+  padding: 0.25rem 0.25rem 0;
+  margin: 1px 0.5rem 0.33rem -1px;
+  height: fit-content;
+  width: fit-content;
+}
+
+svg {
+  height: calc(minmax(100%, var(--spectrum-heading-font-size)) - 2px);
+  width: calc(2 * var(--spectrum-heading-font-size));
+  display: block;
+}
+
+span.site-title {
+  /* Prevent long titles overflowing and covering the search and menu buttons on narrow viewports. */
+  overflow: clip;
+
+  /* Avoid clipping focus ring around link inside title wrapper. */
+  padding: 0.25rem;
+  margin: -0.25rem;
+}
+
 img {
   max-height: var(--spectrum-heading-font-size);
   padding-bottom: 5px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
-}
-
-.siteTitle {
-  /* Prevent long titles overflowing and covering the search and menu buttons on narrow viewports. */
-  overflow: clip;
-  /* Avoid clipping focus ring around link inside title wrapper. */
-  padding: 0.25rem;
-  margin: -0.25rem;
 }

@@ -68,7 +68,7 @@ class FooterSectionResource implements Resource {
       .use(() => (tree) => {
         visit(tree, "element", (node: Element) => {
           if (
-            node.tagName === "div" &&
+            node.tagName === "footer" &&
             node.properties.className &&
             Array.isArray(node.properties.className) &&
             node.properties.className.includes("footer")
@@ -79,7 +79,7 @@ class FooterSectionResource implements Resource {
             const en = tempTree.children.filter(
               (child) => child.type === "element",
             );
-            node.children = en;
+            node.children.push(...en);
           }
         });
         visit(tree, "element", (node: Element) => {
