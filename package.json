@@ -1,6 +1,6 @@
 {
   "name": "greenwoodspectrumtheme",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A theme pack for Greenwood using Adobe Spectrum CSS and Web Components",
   "type": "module",
   "main": "./dist/greenwood-spectrum-theme.js",
@@ -99,8 +99,8 @@
     "@spectrum-web-components/split-view": "^1.4.0",
     "@spectrum-web-components/styles": "^1.4.0",
     "@spectrum-web-components/theme": "^1.4.0",
-    "greenwoodspectrumtheme": "link:",
     "iconify-icon": "^2.3.0",
+    "greenwoodspectrumtheme": "file:./",
     "isomorphic-git": "^1.30.1",
     "rehype-parse": "^9.0.1",
     "rehype-stringify": "^10.0.1",

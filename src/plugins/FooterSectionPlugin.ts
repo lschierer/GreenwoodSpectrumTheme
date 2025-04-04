@@ -1,4 +1,5 @@
 import git from "isomorphic-git";
+import { type ReadCommitResult } from "isomorphic-git";
 import fs from "node:fs";
 import process from "node:process";
 import { unified } from "unified";
@@ -29,6 +30,15 @@ class FooterSectionResource implements Resource {
     const valid = Config.safeParse(options);
     if (valid.success) {
       this.options = valid.data;
+      if (this.options.repo.length) {
+        if (this.options.repo.startsWith("file://")) {
+          this.repo = this.options.repo.replace("file://", "");
+        }
+      }
+      if (DEBUG) {
+        console.log(`this.options.repo is ${this.options.repo}`);
+        console.log(`this.repo is ${this.repo}`);
+      }
     }
 
     this.contentType = "text/html";
@@ -105,6 +115,78 @@ class FooterSectionResource implements Resource {
     });
   }
 
+  // Shared method to get commits from all branches
+  protected async getAllCommits(): Promise<ReadCommitResult[]> {
+    if (DEBUG) {
+      console.log(`Getting all commits from repository: ${this.repo}`);
+    }
+
+    const allCommits: Array<ReadCommitResult> = [];
+
+    try {
+      // First, get all branches
+      const branches = await git.listBranches({
+        fs,
+        dir: this.repo,
+      });
+
+      if (DEBUG) {
+        console.log(`Found branches: ${branches.join(", ")}`);
+      }
+
+      // Collect commits from all branches
+      for (const branch of branches) {
+        try {
+          const branchCommits = await git.log({
+            fs,
+            dir: this.repo,
+            ref: branch,
+            depth: 500, // Increase depth to get more history
+          });
+
+          if (branchCommits.length) {
+            allCommits.push(...branchCommits);
+          }
+        } catch (error) {
+          console.warn(
+            `Error getting commit history for branch ${branch}:`,
+            error,
+          );
+        }
+      }
+
+      // Also try to get all commits using HEAD
+      try {
+        const headCommits = await git.log({
+          fs,
+          dir: this.repo,
+          ref: "HEAD",
+          depth: 1000,
+        });
+
+        if (headCommits.length) {
+          allCommits.push(...headCommits);
+        }
+      } catch (error) {
+        console.warn(`Error getting all commit history:`, error);
+      }
+    } catch (error: unknown) {
+      if (DEBUG) {
+        console.error(`Error getting commit history: `, error);
+      }
+    }
+
+    // Remove duplicate commits by commit hash
+    const uniqueCommits = new Map<string, ReadCommitResult>();
+    for (const commit of allCommits) {
+      if (!uniqueCommits.has(commit.oid)) {
+        uniqueCommits.set(commit.oid, commit);
+      }
+    }
+
+    return Array.from(uniqueCommits.values());
+  }
+
   protected getPrivacyPolicy = () => {
     if (this.options && this.options.privacyPolicy) {
       return `
@@ -118,35 +200,22 @@ class FooterSectionResource implements Resource {
       return "";
     }
   };
+
   protected getFirstYear = async () => {
     if (DEBUG) {
       console.log(`start of getFirstYear`);
     }
     let firstYear = new Date();
-    await git
-      .log({
-        fs,
-        dir: this.repo,
-        follow: true,
-      })
-      .catch((error: unknown) => {
-        if (DEBUG) {
-          console.error(`Error getting commit history: `, error);
-        }
-        // Return empty array to handle the error case properly
-        return [];
-      })
-      .then((gitlog) => {
-        if (gitlog.length) {
-          for (const entry of gitlog) {
-            const EntryDate = new Date(entry.commit.author.timestamp * 1000);
-            const EntryYear = EntryDate.getFullYear();
-            if (EntryYear < firstYear.getFullYear()) {
-              firstYear = EntryDate;
-            }
-          }
-        }
-      });
+
+    const commits = await this.getAllCommits();
+
+    for (const entry of commits) {
+      const entryDate = new Date(entry.commit.author.timestamp * 1000);
+      if (entryDate < firstYear) {
+        firstYear = entryDate;
+      }
+    }
+
     return firstYear;
   };
 
@@ -155,31 +224,28 @@ class FooterSectionResource implements Resource {
       console.log(`start of getAuthors`);
     }
     const repoAuthors = new Set<string>();
-    if (this.options && Array.isArray(this.options.authors)) {
+
+    if (
+      this.options &&
+      this.options.authors !== "git" &&
+      Array.isArray(this.options.authors)
+    ) {
       for (const author of this.options.authors) {
         repoAuthors.add(author);
       }
     } else {
-      await git
-        .log({
-          fs,
-          dir: this.repo,
-          follow: true,
-        })
-        .catch((error: unknown) => {
-          if (DEBUG) {
-            console.error(`Error getting commit history: `, error);
-          }
-        })
-        .then((gitlog) => {
-          if (gitlog?.length) {
-            for (const entry of gitlog) {
-              repoAuthors.add(entry.commit.author.name);
-            }
-          }
-        });
+      const commits = await this.getAllCommits();
+
+      for (const entry of commits) {
+        if (typeof entry.commit.author.name === "string") {
+          repoAuthors.add(entry.commit.author.name);
+        }
+      }
     }
 
+    if (DEBUG) {
+      console.log(`Found authors: ${[...repoAuthors].join(", ")}`);
+    }
     return [...repoAuthors];
   };
 }
