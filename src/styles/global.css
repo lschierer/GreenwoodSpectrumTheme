@@ -91,6 +91,12 @@ header h1.spectrum-Heading {
   color: var(--sl-color-accent);
 }
 
+div.site-title {
+  text-align: center;
+  color: var(--sl-color-accent);
+  height: fit-content;
+}
+
 main {
   z-index: 1;
   margin-left: 8px;
