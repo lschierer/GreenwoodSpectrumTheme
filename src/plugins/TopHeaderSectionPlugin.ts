@@ -60,9 +60,9 @@ class TopHeaderSectionResource implements Resource {
             <div class="navItem">
               <a
                 href=${"/" + section.replaceAll(" ", "") + "/"}
-                class="spectrum-Link spectrum-Link--primary"
+                class="spectrum-Link spectrum-Link--primary spectrum-Link--quiet"
               >
-                <span class="">${section.replaceAll("_", " ")}</span>
+                <span class="spectrum-Heading spectrum-Heading--serif spectrum-Heading--sizeXS">${section.replaceAll("_", " ")}</span>
               </a>
             </div>
           `;
@@ -118,14 +118,16 @@ class TopHeaderSectionResource implements Resource {
       : "";
 
     return `
-    <span class="spectrum-Heading spectrum-Heading--sizeXS">
-      <a href='/' class="site-title ">
-        ${siteLogo}
-        <span class="siteTitle spectrum-Heading spectrum-Heading--sizeXXL">
+      <a href='/' class="site-title spectrum-Link spectrum-Link--quiet spectrum-Link--secondary">
+        <span class=" site-title spectrum-Heading spectrum-Heading--sizeXS">
+          ${siteLogo}
+        </span>
+      </a>
+      <a href='/' class="site-title spectrum-Link spectrum-Link--quiet spectrum-Link--secondary">
+        <span class="site-title spectrum-Heading spectrum-Heading--sizeXL">
           ${siteTitle}
         </span>
       </a>
-    </span>
     `;
   };
 

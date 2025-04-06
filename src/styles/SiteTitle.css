@@ -2,7 +2,8 @@ div.header {
   --mod-heading-margin-start: 2px;
 }
 
-.site-title {
+site-title-section .site-title {
+  flex: 1;
   align-items: center;
   font-weight: 600;
   color: var(--sl-color-text-accent);
@@ -10,6 +11,9 @@ div.header {
   white-space: nowrap;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--spectrum-heading-font-size);
 }
 
 .site-logo {
@@ -17,6 +21,7 @@ div.header {
   margin: 1px 0.5rem 0.33rem -1px;
   height: fit-content;
   width: fit-content;
+  flex-shrink: 0;
 }
 
 svg {
@@ -26,8 +31,11 @@ svg {
 }
 
 span.site-title {
+  white-space: wrap;
+
   /* Prevent long titles overflowing and covering the search and menu buttons on narrow viewports. */
   overflow: clip;
+  text-overflow: ellipsis;
 
   /* Avoid clipping focus ring around link inside title wrapper. */
   padding: 0.25rem;
