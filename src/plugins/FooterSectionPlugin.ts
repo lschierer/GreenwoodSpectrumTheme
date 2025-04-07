@@ -1,6 +1,7 @@
 import git from "isomorphic-git";
 import { type ReadCommitResult } from "isomorphic-git";
 import fs from "node:fs";
+import path from "node:path";
 import process from "node:process";
 import { unified } from "unified";
 import rehypeParse from "rehype-parse";
@@ -234,11 +235,56 @@ class FooterSectionResource implements Resource {
         repoAuthors.add(author);
       }
     } else {
+      // Check if .mailmap exists in the repo
+      const mailmapPath = path.join(this.repo, '.mailmap');
+      const hasMailmap = fs.existsSync(mailmapPath);
+      
+      if (DEBUG && hasMailmap) {
+        console.log(`Found .mailmap file at ${mailmapPath}`);
+      }
+      
+      // Get all commits
       const commits = await this.getAllCommits();
-
-      for (const entry of commits) {
-        if (typeof entry.commit.author.name === "string") {
-          repoAuthors.add(entry.commit.author.name);
+      
+      // Process commits with mailmap if available
+      if (hasMailmap) {
+        try {
+          // Read the mailmap file
+          const mailmapContent = fs.readFileSync(mailmapPath, 'utf8');
+          const mailmapEntries = this.parseMailmap(mailmapContent);
+          
+          if (DEBUG) {
+            console.log(`Parsed ${mailmapEntries.size} entries from .mailmap`);
+          }
+          
+          // Apply mailmap to normalize author names
+          for (const entry of commits) {
+            if (typeof entry.commit.author.name === "string" && typeof entry.commit.author.email === "string") {
+              const normalizedName = this.getNormalizedAuthor(
+                entry.commit.author.name, 
+                entry.commit.author.email, 
+                mailmapEntries
+              );
+              repoAuthors.add(normalizedName);
+            } else if (typeof entry.commit.author.name === "string") {
+              repoAuthors.add(entry.commit.author.name);
+            }
+          }
+        } catch (error) {
+          console.warn(`Error processing .mailmap file:`, error);
+          // Fallback to regular author processing
+          for (const entry of commits) {
+            if (typeof entry.commit.author.name === "string") {
+              repoAuthors.add(entry.commit.author.name);
+            }
+          }
+        }
+      } else {
+        // No mailmap, just use author names as is
+        for (const entry of commits) {
+          if (typeof entry.commit.author.name === "string") {
+            repoAuthors.add(entry.commit.author.name);
+          }
         }
       }
     }
@@ -248,6 +294,53 @@ class FooterSectionResource implements Resource {
     }
     return [...repoAuthors];
   };
+  
+  // Parse mailmap file into a map of email -> canonical name
+  private parseMailmap(content: string): Map<string, string> {
+    const mailmap = new Map<string, string>();
+    const lines = content.split('\n');
+    
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      if (!trimmedLine || trimmedLine.startsWith('#')) continue;
+      
+      // Parse mailmap line
+      // Format can be:
+      // Canonical Name <canonical@email> Name <email>
+      // Canonical Name <canonical@email> <email>
+      // Canonical Name Name <email>
+      // <canonical@email> <email>
+      
+      const match = trimmedLine.match(/^([^<]+)?(?:<([^>]+)>)?\s+(?:([^<]+)?(?:<([^>]+)>)?)?$/);
+      if (match) {
+        const [, canonicalName, canonicalEmail, name, email] = match;
+        
+        if (email) {
+          // If we have an email, use it as the key
+          mailmap.set(email.trim(), (canonicalName || name || '').trim());
+        } else if (canonicalEmail && name) {
+          // Handle case where there's no <email> but a name and canonical email
+          mailmap.set(canonicalEmail.trim(), canonicalName.trim());
+        }
+      }
+    }
+    
+    return mailmap;
+  }
+  
+  // Get normalized author name based on mailmap
+  private getNormalizedAuthor(name: string, email: string, mailmap: Map<string, string>): string {
+    // Check if this email has a mapping
+    if (mailmap.has(email)) {
+      const canonicalName = mailmap.get(email);
+      if (canonicalName && canonicalName.length > 0) {
+        return canonicalName;
+      }
+    }
+    
+    // No mapping found, return original name
+    return name;
+  }
 }
 
 const ExternalPluginFooterSection = (options: Config): ResourcePlugin[] => {
@@ -262,3 +355,6 @@ const ExternalPluginFooterSection = (options: Config): ResourcePlugin[] => {
 };
 
 export { ExternalPluginFooterSection };
+// NOTE: This implementation includes a custom .mailmap parser as a workaround
+// until isomorphic-git natively supports .mailmap files.
+// See: https://github.com/isomorphic-git/isomorphic-git/issues/1600
