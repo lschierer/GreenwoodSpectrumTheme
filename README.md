@@ -29,3 +29,19 @@ plugins: [
 [Greenwood]: https://greenwoodjs.dev/
 [Theme Pack]: https://greenwoodjs.dev/guides/tutorials/theme-packs/
 [zod]: https://zod.dev/
+## CSS Variables for Layout Customization
+
+This theme pack provides CSS variables that can be overridden by consuming projects to customize the layout:
+
+```css
+/* In your project's CSS */
+:root {
+  /* Adjust these values based on your project's header and footer sizes */
+  --theme-header-height: 120px; /* Default is 100px */
+  --theme-footer-height: 60px;  /* Default is 50px */
+  /* No need to modify this one - it's calculated automatically */
+  --theme-non-content-height: calc(var(--theme-header-height) + var(--theme-footer-height));
+}
+```
+
+These variables control the layout of the split view and scrollable areas. Adjust them based on the actual size of your header and footer elements.

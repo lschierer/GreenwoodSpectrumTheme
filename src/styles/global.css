@@ -12,11 +12,10 @@
 @import "remark-alerts/styles/github-colors-dark-class.css";
 
 /* Default Colors */
-:root,
-::backdrop,
-sp-theme {
+:root {
   --spectrum-background-base-color: var(--spectrum-gray-200);
   --mod-splitview-background-color: var(--spectrum-background-base-color);
+  --mod-splitview-handle-background-color: var(--spectrum-gray-400);
   --sl-color-accent-high: var(--spectrum-cyan-1000);
   --sl-color-accent: var(--spectrum-cyan-700);
   --sl-color-accent-low: var(--spectrum-cyan-400);
@@ -31,6 +30,13 @@ sp-theme {
   --sl-color-gray-6: var(--spectrum-gray-700);
   --sl-color-gray-7: var(--spectrum-gray-800);
   --sl-color-black: var(--spectrum-gray-900);
+
+  /* Layout variables that can be overridden by consuming projects */
+  --theme-header-height: 100px;
+  --theme-footer-height: 50px;
+  --theme-non-content-height: calc(
+    var(--theme-header-height) + var(--theme-footer-height)
+  );
 }
 
 /* I find I prefer less color range between high and low in dark mode */
@@ -48,6 +54,13 @@ sp-theme {
   --sl-color-accent-low: var(--spectrum-cyan-500);
 }
 
+/* Apply root variables to theme and backdrop */
+::backdrop,
+sp-theme {
+  background-color: var(--spectrum-background-base-color);
+  color: var(--sl-color-black);
+}
+
 *,
 *::before,
 *::after {
@@ -59,18 +72,20 @@ html {
   height: 100vh;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: auto;
+  height: 100vh;
   min-height: 100vh;
   color: var(--sl-color-black);
   background-color: var(--spectrum-background-base-color);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 
   --mod-body-font-color: var(--sl-color-black);
   --mod-heading-font-color: var(--sl-color-accent);
@@ -81,6 +96,8 @@ body {
 sp-split-view {
   min-height: 0;
   flex: 1 1 auto;
+  height: calc(100vh - var(--theme-non-content-height));
+  overflow: hidden;
 }
 
 sp-split-view ::slotted(*) {
@@ -94,10 +111,10 @@ sp-theme {
   z-index: 0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   flex: 1;
-  background-color: var(--spectrum-background-base-color);
+  overflow: hidden;
 }
 
 header h1.spectrum-Heading {
@@ -119,12 +136,16 @@ body div.main {
   width: 100%;
   padding-left: 1rem;
   overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  background-color: var(--spectrum-background-base-color);
 }
 
 main {
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
+  background-color: var(--spectrum-background-base-color);
 }
 
 footer {
@@ -149,3 +170,29 @@ span.privacy {
 span.copyright {
   margin-right: 5rem;
 }
+
+sp-split-view div.nav {
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--sl-color-gray-2);
+}
+/* Title section styling - more specific to avoid conflicts */
+sp-theme > div.title-section {
+  background-color: var(--spectrum-background-base-color);
+  padding: 1rem;
+  width: 100%;
+}
+
+sp-theme > div.title-section h1 {
+  color: var(--mod-heading-font-color);
+  background-color: inherit;
+  margin: 0;
+}
+
+/* Site header container - more specific to avoid conflicts with TopHeader.css */
+sp-theme > header {
+  width: 100%;
+  background-color: var(--spectrum-background-base-color);
+}
+
+/* The .header class in TopHeader.css is for the navigation bar specifically */
