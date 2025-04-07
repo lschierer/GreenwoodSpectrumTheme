@@ -107,16 +107,6 @@ class SideBarResource implements Resource {
               },
               children: [],
             });
-
-            // Add iconify script
-            node.children.push({
-              type: "element",
-              tagName: "script",
-              properties: {
-                src: "https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js",
-              },
-              children: [],
-            });
           }
         });
       })
@@ -179,7 +169,10 @@ class SideBarResource implements Resource {
     // First pass: create directory structure
     for (const page of pages) {
       //skip the auto generated 404 route and api routes
-      if (!page.route.localeCompare("/404/") || page.route.startsWith("/api/")) {
+      if (
+        !page.route.localeCompare("/404/") ||
+        page.route.startsWith("/api/")
+      ) {
         continue;
       }
 

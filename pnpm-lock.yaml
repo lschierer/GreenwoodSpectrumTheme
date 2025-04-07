@@ -100,14 +100,14 @@ importers:
         version: 3.24.2
     devDependencies:
       '@greenwood/cli':
-        specifier: 0.32.0-alpha.8
-        version: 0.32.0-alpha.8
+        specifier: 0.32.0-alpha.9
+        version: 0.32.0-alpha.9
       '@greenwood/plugin-import-raw':
-        specifier: 0.32.0-alpha.8
-        version: 0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)
+        specifier: 0.32.0-alpha.9
+        version: 0.32.0-alpha.9(@greenwood/cli@0.32.0-alpha.9)
       '@greenwood/plugin-postcss':
-        specifier: 0.32.0-alpha.8
-        version: 0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)
+        specifier: 0.32.0-alpha.9
+        version: 0.32.0-alpha.9(@greenwood/cli@0.32.0-alpha.9)
       '@tsconfig/node22':
         specifier: ^22.0.1
         version: 22.0.1
@@ -486,18 +486,18 @@ packages:
   '@floating-ui/utils@0.2.9':
     resolution: {integrity: sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==}
 
-  '@greenwood/cli@0.32.0-alpha.8':
-    resolution: {integrity: sha512-VArE4iUcKfXA46Wra7ADZqRfRTDvxHcNP2WmKS1H38ITstwHM9gykI1tvpQpait2667bEebzrrC4JwjiJqivSg==}
+  '@greenwood/cli@0.32.0-alpha.9':
+    resolution: {integrity: sha512-+J228CKd9yzBrAOgF2CfNRd4Ups2jFp/wv3BQ29cZTqOWVuRf3Tx8+MxhPzF9R8Oq/4qgHI4vRYDIQyIRAy+aA==}
     engines: {node: ^18.20.5 || ^20.18.3 || >=22.12.0}
     hasBin: true
 
-  '@greenwood/plugin-import-raw@0.32.0-alpha.8':
-    resolution: {integrity: sha512-s+8LTO0SYXlcLq8+Rmpl1KXkpks4bE/lfntMJwGLzeoifWS6/VTfKknyUr9yBXmE/xoW0Es39Q9f+/W4FpJzXA==}
+  '@greenwood/plugin-import-raw@0.32.0-alpha.9':
+    resolution: {integrity: sha512-8OwvW74PMp7SXFZCycjKmfv+UZZtJmt6qTdF2SHXA/3XLSYCNpwqWvr2fVBAQgLr/6Uoq6OMn/5rlfbcHMV6AA==}
     peerDependencies:
       '@greenwood/cli': ^0.31.0
 
-  '@greenwood/plugin-postcss@0.32.0-alpha.8':
-    resolution: {integrity: sha512-VatTgJ+r8tFFmHhItzTg+bqdgcNHZnerZKV/Z8IOv6EGAwsjACyUeE3hF3Q1XdZcJPyXRW0YBlRZjooJH1OLvQ==}
+  '@greenwood/plugin-postcss@0.32.0-alpha.9':
+    resolution: {integrity: sha512-AtbGi+Upsevx06TpENpuDtEwVrZQ/dGHZzAx5gWMTD1BBai1PWi2300vrgMXHAoBR4eKdNa3kURD3wo9S5lziA==}
     peerDependencies:
       '@greenwood/cli': ^0.31.0
 
@@ -3746,9 +3746,9 @@ packages:
     resolution: {integrity: sha512-3hu+tD8YzSLGuFYtPRb48vdhKMi0KQV5sn+uWr8+7dMEq/2G/dtLrdDinkLjqq5TIbIBjYJ4Ax/n3YiaW7QM8A==}
     engines: {node: 20 || >=22}
 
-  wc-compiler@0.16.0:
-    resolution: {integrity: sha512-1UngRtP8cA8HFFR1O8JDPz7rCmdeAq5gYoEhuuwqCgnhW37QGhAkq/fuG6CKMB5D+R4zI5mzkkIHk1ZAQ41YTg==}
-    engines: {node: '>=14'}
+  wc-compiler@0.17.0:
+    resolution: {integrity: sha512-08d31qhYjlJiTEfTEW3kpSdcNnx0j0eGaUIA1/+oyczJCxya7+tvbQ/Tz3wbS2kzd/t8iSxNYdfhpf43o6RVuA==}
+    engines: {node: '>=18'}
 
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
@@ -4058,7 +4058,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.9': {}
 
-  '@greenwood/cli@0.32.0-alpha.8':
+  '@greenwood/cli@0.32.0-alpha.9':
     dependencies:
       '@rollup/plugin-commonjs': 28.0.3(rollup@4.39.0)
       '@rollup/plugin-node-resolve': 15.3.1(rollup@4.39.0)
@@ -4082,19 +4082,19 @@ snapshots:
       rollup: 4.39.0
       sucrase: 3.35.0
       unified: 11.0.5
-      wc-compiler: 0.16.0
+      wc-compiler: 0.17.0
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  '@greenwood/plugin-import-raw@0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)':
+  '@greenwood/plugin-import-raw@0.32.0-alpha.9(@greenwood/cli@0.32.0-alpha.9)':
     dependencies:
-      '@greenwood/cli': 0.32.0-alpha.8
+      '@greenwood/cli': 0.32.0-alpha.9
 
-  '@greenwood/plugin-postcss@0.32.0-alpha.8(@greenwood/cli@0.32.0-alpha.8)':
+  '@greenwood/plugin-postcss@0.32.0-alpha.9(@greenwood/cli@0.32.0-alpha.9)':
     dependencies:
-      '@greenwood/cli': 0.32.0-alpha.8
+      '@greenwood/cli': 0.32.0-alpha.9
       postcss: 8.5.3
       postcss-import: 16.1.0(postcss@8.5.3)
       postcss-preset-env: 7.8.3(postcss@8.5.3)
@@ -7814,7 +7814,7 @@ snapshots:
 
   walk-up-path@4.0.0: {}
 
-  wc-compiler@0.16.0:
+  wc-compiler@0.17.0:
     dependencies:
       '@projectevergreen/acorn-jsx-esm': 0.1.0(acorn@8.14.1)
       acorn: 8.14.1

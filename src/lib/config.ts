@@ -53,17 +53,3 @@ export const Config = z.object({
     .describe('the branch of the repository if not "main"'),
 });
 export type Config = z.infer<typeof Config>;
-
-export function loadConfig(localConfig: object = {}): Config | undefined {
-  if (DEBUG) {
-    console.log(`loadConfig start`);
-  }
-
-  const valid = Config.safeParse(localConfig);
-  if (valid.success) {
-    return valid.data;
-  } else {
-    console.error(valid.error.message);
-    throw new Error("Invalid config");
-  }
-}

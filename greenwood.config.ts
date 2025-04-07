@@ -1,13 +1,20 @@
 import { greenwoodPluginPostCss } from "@greenwood/plugin-postcss";
 import { greenwoodPluginImportRaw } from "@greenwood/plugin-import-raw";
+import { exit } from "node:process";
 
 import type { Config } from "@greenwood/cli";
 
 import { greenwoodSpectrumThemePack } from "./src/greenwood-spectrum-theme.ts";
-import { loadConfig, type Config as PackConfig } from "./src/lib/config.ts";
+import { Config as PackConfig } from "./src/lib/config.ts";
 import localConfig from "./src/greenwood-spectrum-theme.config.ts";
 
-const config = loadConfig(localConfig) as PackConfig;
+const valid = PackConfig.safeParse(localConfig);
+if (!valid.success) {
+  console.error(valid.error.message);
+  throw new Error(valid.error.message);
+  exit(1);
+}
+const config = valid.data;
 
 export default {
   useTsc: true,

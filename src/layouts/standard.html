@@ -8,6 +8,9 @@
   />
 
   <script type="module" src="/components/theme.ts"></script>
+  <script type="module">
+    import "iconify-icon";
+  </script>
 
   <script type="module">
     import "/node_modules/@spectrum-web-components/theme/sp-theme.js";
@@ -32,7 +35,7 @@
 
     <sp-split-view resizable primary-size="20%">
       <div class="nav"></div>
-      <div>
+      <div class="main">
         <main>
           <content-outlet></content-outlet>
         </main>
