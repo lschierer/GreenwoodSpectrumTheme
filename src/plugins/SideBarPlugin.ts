@@ -144,7 +144,34 @@ class SideBarResource implements Resource {
       isActualPage: false,
     };
 
-    for (const page of pages) {
+    // Sort pages first by order, then by title
+    const sortedPages = [...pages].sort((a, b) => {
+      const oa =
+        a.data && Object.keys(a.data).includes("order")
+          ? (a.data["order" as keyof typeof a.data] as number)
+          : undefined;
+      const ob =
+        b.data && Object.keys(b.data).includes("order")
+          ? (b.data["order" as keyof typeof b.data] as number)
+          : undefined;
+
+      if (oa !== undefined && ob !== undefined) {
+        return oa - ob;
+      } else if (oa !== undefined) {
+        return -1; // Items with order come first
+      } else if (ob !== undefined) {
+        return 1;
+      } else {
+        /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
+        const at = a.title ?? a.id;
+        /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
+        const bt = b.title ?? b.id;
+        return at.localeCompare(bt);
+      }
+    });
+
+    // First pass: collect all page routes
+    for (const page of sortedPages) {
       pageRoutes.add(page.route);
 
       //skip the auto generated 404 route
@@ -166,8 +193,8 @@ class SideBarResource implements Resource {
       }
     }
 
-    // First pass: create directory structure
-    for (const page of pages) {
+    // Second pass: create directory structure
+    for (const page of sortedPages) {
       //skip the auto generated 404 route and api routes
       if (
         !page.route.localeCompare("/404/") ||
@@ -252,11 +279,48 @@ class SideBarResource implements Resource {
       }
     }
 
+    // Sort the entire tree recursively after it's built
+    this.sortTreeNodes(root);
+
     if (DEBUG) {
       console.log("Tree structure:", JSON.stringify(root, null, 2));
     }
 
     return root;
+  };
+
+  // Sort tree nodes recursively
+  protected sortTreeNodes = (node: SideBarNode): void => {
+    if (!node.children || node.children.length === 0) {
+      return;
+    }
+
+    // Sort the current level
+    node.children.sort((a, b) => {
+      // Sort by order if available
+      const orderA = this.getOrder(a);
+      const orderB = this.getOrder(b);
+      const titleA = a.title || a.id || "";
+      const titleB = b.title || b.id || "";
+
+      if (orderA !== null && orderB !== null) {
+        //if two pages have the same order, sort by title, otherwise sort by order.
+        return orderA - orderB ? orderA - orderB : titleA.localeCompare(titleB);
+      } else if (orderA !== null) {
+        return -1; // Items with order come first
+      } else if (orderB !== null) {
+        return 1;
+      }
+
+      // Then sort by title
+
+      return titleA.localeCompare(titleB);
+    });
+
+    // Sort children recursively
+    for (const child of node.children) {
+      this.sortTreeNodes(child);
+    }
   };
 
   // Get order value from page data if available
