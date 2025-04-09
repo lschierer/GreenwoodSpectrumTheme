@@ -7,18 +7,17 @@
     rel="stylesheet"
   />
 
-  <script type="module" src="/components/theme.ts"></script>
   <script type="module">
-    import "iconify-icon";
+    import "/node_modules/iconify-icon";
   </script>
 
   <script type="module">
     import "/node_modules/@spectrum-web-components/theme/sp-theme.js";
     import "/node_modules/@spectrum-web-components/theme/src/themes.js";
-  </script>
-  <script type="module">
     import "/node_modules/@spectrum-web-components/split-view/sp-split-view.js";
   </script>
+
+  <script type="module" src="/components/theme.ts"></script>
 </head>
 <body>
   <sp-theme class="spectrum-Typography">
